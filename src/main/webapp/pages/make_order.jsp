@@ -19,18 +19,23 @@
 	<div class="container">
 		<div class="row">
 			<div class="col">
-				<img src="${pageContext.request.contextPath}${car.getImageUrl()}"
-					alt="">
-				<h6>${car.getCarManufacturer()}${car.getModel()}</h6>
-				<span class="year text-success">${car.getYear()}</span>
-				<c:if test="${car.getCarTransmission() == 'AUTOMATIC'}">
+
+<%--				<img src="${pageContext.request.contextPath}${car.getImageUrl()}"--%>
+<%--					alt="">--%>
+
+				<h6>${car.getCarDescription()}</h6>
+
+<%--				<span class="year text-success">${car.getYear()}</span>--%>
+
+				<c:if test="${car.getTransmissionType() == 'AUTOMATIC'}">
 					<span class="transmission text-success"><fmt:message
 							key="home_page.transmission.automatic" /></span>
 				</c:if>
-				<c:if test="${car.getCarTransmission() == 'MANUAL'}">
+				<c:if test="${car.getTransmissionType() == 'MANUAL'}">
 					<span class="transmission text-success"><fmt:message
 							key="home_page.transmission.manual" /></span>
 				</c:if>
+
 				<c:if test="${car.isConditioner() == true}">
 					<span class="conditioner text-success"><fmt:message
 							key="home_page.conditioner" /></span>
@@ -40,13 +45,7 @@
 				<br />
 				<h5>
 					<fmt:message key="page.make_order.price" />
-					:
-					<c:if test="${car.getDiscount() > 0}">
-			${car.getCost() - car.getCost()*car.getDiscount()/100}
-			</c:if>
-					<c:if test="${car.getDiscount() == 0}">
-			${car.getCost()}
-			</c:if>
+					: ${car.getCost()}
 				</h5>
 				<form action="${pageContext.request.contextPath}/controller"
 					method="post">

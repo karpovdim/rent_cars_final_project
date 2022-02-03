@@ -16,6 +16,10 @@ public final class RequestParameter {
 	public static final String ORDER_ID_INCORRECT = "order_id_incorrect";
 	public static final String CAR_MANUFACTURER_INCORRECT = "car_manufacturer_incorrect";
 
+	// Date data markers
+	public static final String RENT_DATE = "pick_up_date";
+	public static final String RETURN_DATE = "return_date";
+
 	// User data markers
 	public static final String USER_ID = "id";
 	public static final String USER_EMAIL = "email";
@@ -71,13 +75,13 @@ public final class RequestParameter {
 	// Incorrect data markers
 	public static final String CAR_NOT_FOUND_OF_DELETE = "car_not_found_of_delete";
 	public static  final String DELETE_CAR_INCORRECT = "delete_car_incorrect";
-	//public static final String CHANGE_CARS_STATUS_INCORRECT = "change_car_status_incorrect";
+//	public static final String CHANGE_CARS_STATUS_INCORRECT = "change_car_status_incorrect";
 //	public static final String ORDER_INCORRECT_DATE = "incorrect_date";
 //	public static final String ORDER_PICK_UP_BEFORE_RETURN = "pick_up_date_is_before_return_date";
 //	public static final String INVALID_FILE = "invalid_file";
 //	public static final String INPUT_DATA_INCORRECT = "input_data_incorrect";
 //	public static final String ORDER_ID_INCORRECT = "order_id_incorrect";
-	//public static final String CAR_MANUFACTURER_INCORRECT = "car_manufacturer_incorrect";
+//	public static final String CAR_MANUFACTURER_INCORRECT = "car_manufacturer_incorrect";
 	public static final String INPUT_DATA_CAR_STATUS_INCORRECT = "car_status_incorrect";
 	public static final String INPUT_DATA_CAR_TRANSMISSION_INCORRECT = "car_transmission_type_incorrect";
 	public static final String INPUT_DATA_CAR_COST_INCORRECT = "car_cost_incorrect";

@@ -26,6 +26,9 @@ public final class PagePath {
 	public static final String CHANGE_PASSWORD_REDIRECT = "/rentalcar/controller?command=to_change_password_page_command";
 	public static final String CHANGE_PASSWORD_PAGE = "/pages/change_password.jsp";
 
+	public static final String PAYMENT_PAGE = "/pages/payment.jsp";
+	public static final String PAYMENT_PAGE_REDIRECT = "/rentalcar/controller?command=to_payment_entry_page_command";
+
 	public static final String HOME_PAGE = "/pages/home.jsp";
 	public static final String HOME_PAGE_REDIRECT = "/rentalcar/controller?command=to_home_page_command";
 

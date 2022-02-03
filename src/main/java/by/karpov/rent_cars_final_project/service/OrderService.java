@@ -4,6 +4,7 @@ import by.karpov.rent_cars_final_project.entity.Order;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface OrderService {
@@ -24,4 +25,8 @@ public interface OrderService {
     Optional<Order> updateStatus(long parseLong, Order.OrderStatus orderStatus) throws ServiceException;
 
     List<Order> findByStatus(Order.OrderStatus orderStatus)throws ServiceException;
+
+    long add(Map<String, String> parameters) throws ServiceException;
+
+    List<Order> findByCarId(Long id) throws ServiceException;
 }

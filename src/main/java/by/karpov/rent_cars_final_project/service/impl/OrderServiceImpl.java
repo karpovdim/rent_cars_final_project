@@ -1,20 +1,32 @@
 package by.karpov.rent_cars_final_project.service.impl;
 
+import by.karpov.rent_cars_final_project.dao.CarDao;
 import by.karpov.rent_cars_final_project.dao.OrderDao;
+import by.karpov.rent_cars_final_project.dao.UserDao;
 import by.karpov.rent_cars_final_project.dao.impl.CarDaoImpl;
 import by.karpov.rent_cars_final_project.dao.impl.OrderDaoImpl;
+import by.karpov.rent_cars_final_project.dao.impl.UserDaoImpl;
+import by.karpov.rent_cars_final_project.entity.Car;
 import by.karpov.rent_cars_final_project.entity.Order;
 import by.karpov.rent_cars_final_project.exception.DaoException;
 import by.karpov.rent_cars_final_project.exception.NotFoundException;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
 import by.karpov.rent_cars_final_project.service.OrderService;
 import by.karpov.rent_cars_final_project.validator.InputDataValidator;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static by.karpov.rent_cars_final_project.command.RequestParameter.*;
 
 public class OrderServiceImpl implements OrderService {
     private static final Logger LOGGER = LogManager.getLogger(OrderServiceImpl.class);
@@ -143,5 +155,48 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException("Exception in method countOrders()", e);
         }
         return countOrders;
+    }
+
+    @Override
+    public long add(Map<String, String> parameters) throws ServiceException {
+        CarDao carDao = CarDaoImpl.getInstance();
+        UserDao userDao = UserDaoImpl.getInstance();
+        try {
+            LocalDate rentDate = LocalDate.parse(parameters.get(RENT_DATE));
+            LocalDate returnDate = LocalDate.parse(parameters.get(RETURN_DATE));
+            long carId = Long.parseLong(parameters.get(CAR_ID));
+            long userId = Long.parseLong(parameters.get(USER_ID));
+            final var order = Order.builder()
+                    .car(carDao.findById(carId).orElseThrow(() -> new NotFoundException(carId)))
+                    .user(userDao.findById(userId).orElseThrow(() -> new NotFoundException(userId)))
+                    .rentDate(rentDate)
+                    .returnDate(returnDate)
+                    .status(Order.OrderStatus.AWAITS_PAYMENT)
+                    .build();
+            final var newOrder = orderDao.create(order);
+
+            final var orderId = newOrder.getId();
+            if(orderId!=null){
+                final var car = carDao.findById(carId).get();
+                car.setCarStatus(Car.CarStatus.BOOKED);
+                carDao.update(car);
+            }
+            return orderId;
+        } catch (DaoException | NotFoundException e) {
+            LOGGER.error("exception in method add()", e);
+            throw new ServiceException("Exception when add order and return id", e);
+        }
+    }
+
+    @Override
+    public List<Order> findByCarId(Long carId) throws ServiceException {
+        try {
+            return orderDao.findAll().stream()
+                    .filter(id -> id.getCar().getId().equals(carId))
+                    .collect(Collectors.toList());
+        } catch (DaoException e) {
+            LOGGER.error("exception in method findByCarId()", e);
+            throw new ServiceException("Exception when find orders by car id", e);
+        }
     }
 }
