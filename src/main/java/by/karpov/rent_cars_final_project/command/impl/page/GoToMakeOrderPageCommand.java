@@ -29,9 +29,9 @@ public class GoToMakeOrderPageCommand implements Command {
 		session.setAttribute(SessionAttribute.PREVIOUS_PAGE,
 				PagePath.MAKE_ORDER_REDIRECT + "&" + RequestParameter.CAR_ID + "=" + carId);
 		try {
-			Optional<Car> localCar = service.findById(Long.parseLong(carId));
-			if (localCar.isPresent()) {
-				Car car = localCar.get();
+			Optional<Car> optionalCar = service.findById(Long.parseLong(carId));
+			if (optionalCar.isPresent()) {
+				Car car = optionalCar.get();
 				router = new Router(PagePath.MAKE_ORDER_PAGE);
 				session.setAttribute(SessionAttribute.CAR, car);
 			} else {
