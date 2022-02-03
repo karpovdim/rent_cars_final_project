@@ -1,0 +1,2 @@
+# R...cars
+R...cars is a web platform that allows you to book cars online. You can look through the list of current cars, choose the one you like, then select the rental period and pay for it. Also, you can search for a car. The system has 2 language: English, Russian and 3 types of roles: Guest, User, Admin. New users are given the Guest role. If the Guest is authenticates or registered, he gets the User role.
