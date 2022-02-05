@@ -4,6 +4,7 @@ import by.karpov.rent_cars_final_project.dao.CarDao;
 import by.karpov.rent_cars_final_project.dao.impl.CarDaoImpl;
 import by.karpov.rent_cars_final_project.entity.Car;
 import by.karpov.rent_cars_final_project.exception.DaoException;
+import by.karpov.rent_cars_final_project.exception.NotFoundException;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
 import by.karpov.rent_cars_final_project.service.CarService;
 import by.karpov.rent_cars_final_project.validator.InputDataValidator;
@@ -11,9 +12,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 
 import static by.karpov.rent_cars_final_project.command.RequestParameter.*;
 
@@ -166,5 +170,13 @@ public class CarServiceImpl implements CarService {
             throw new ServiceException(e);
         }
         return optionalCar;
+    }
+
+    @Override
+    public List<Car> findByManufacture(String manufacturer) throws ServiceException {
+        final var cars = findAll().stream()
+                .filter(car -> car.getCarDescription().contains(manufacturer))
+                .collect(Collectors.toList());
+        return List.copyOf(cars);
     }
 }
