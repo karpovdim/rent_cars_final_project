@@ -8,6 +8,7 @@ import by.karpov.rent_cars_final_project.dao.impl.OrderDaoImpl;
 import by.karpov.rent_cars_final_project.dao.impl.UserDaoImpl;
 import by.karpov.rent_cars_final_project.entity.Car;
 import by.karpov.rent_cars_final_project.entity.Order;
+import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.DaoException;
 import by.karpov.rent_cars_final_project.exception.NotFoundException;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
@@ -44,14 +45,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Optional<Order> findById(long id) throws ServiceException {
-        final Optional<Order> optionalOrder;
         try {
-            optionalOrder = orderDao.findById(id);
+         var   optionalOrder = orderDao.findById(id);
+          return setUserAndCarById(optionalOrder);
         } catch (DaoException e) {
             LOGGER.error("Error while find by id task [{}]", id);
             throw new ServiceException(e);
         }
-        return optionalOrder;
     }
 
     @Override
@@ -65,7 +65,6 @@ public class OrderServiceImpl implements OrderService {
         }
         return List.copyOf(orders);
     }
-
     @Override
     public Order create(Order order) throws ServiceException {
         final Order createOrder;
@@ -158,6 +157,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public double countOrders(long userId) throws ServiceException {
+        try {
+            final var count = orderDao.findAll().stream()
+                    .filter(order -> order.getUser().getId() == userId)
+                    .count();
+            return (double)count;
+        } catch (DaoException e) {
+            LOGGER.error("Exception in method countOrders() with user id", e);
+            throw new ServiceException("Exception in method countOrders() with user id", e);
+        }
+    }
+
+    @Override
     public long add(Map<String, String> parameters) throws ServiceException {
         CarDao carDao = CarDaoImpl.getInstance();
         UserDao userDao = UserDaoImpl.getInstance();
@@ -198,5 +210,46 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.error("exception in method findByCarId()", e);
             throw new ServiceException("Exception when find orders by car id", e);
         }
+    }
+
+    @Override
+    public List<Order> findByUserIdAndLimit(Long userId, int leftBorderCars, int limitOrdersOnPage) throws ServiceException {
+            LOGGER.info("method findByUserIdAndLimit()");
+            try {
+                final var orders = orderDao.findByUserIdAndLimit(userId, leftBorderCars, limitOrdersOnPage);
+                return listOrdersFillingCarsAndUsers(orders);
+            } catch (DaoException e) {
+                LOGGER.error("exception in method findByUserIdAndLimit()", e);
+                throw new ServiceException("Exception when find orders by user id and limit", e);
+        }
+    }
+
+    private List<Order> listOrdersFillingCarsAndUsers(List<Order> orders){
+        final var listProcessing = orders.stream()
+                .map(Optional::of)
+                .map(order -> uncheckCall(() -> setUserAndCarById(order)))  // TODO uncheckCall
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+        return List.copyOf(listProcessing);
+    }
+
+    private Optional<Order> setUserAndCarById(Optional<Order> optionalOrder) throws ServiceException {
+        final var carService = CarServiceImpl.getInstance();
+        final var userService = UserServiceImpl.getInstance();
+        try{
+            if (optionalOrder.isPresent()) {
+                final var order = optionalOrder.get();
+                final var carId = order.getCar().getId();
+                final var car = carService.findById(carId).orElseThrow(() -> new NotFoundException(carId));
+                final var userId = order.getUser().getId();
+                final var user = userService.findById(userId).orElseThrow(() -> new NotFoundException(userId));
+                order.setCar(car);
+                order.setUser(user);
+                return Optional.of(order);}
+        }catch (NotFoundException e) {
+            throw new ServiceException(e);
+        }
+        return Optional.empty();
     }
 }

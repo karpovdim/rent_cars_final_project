@@ -271,6 +271,22 @@ public final class QueryDao {
                         ORDER BY so.id
              LIMIT ?, ?
             """;
+    public static final String FIND_ORDERS_BY_USER_ID_AND_LIMIT = """
+            SELECT orders.id,
+            price,
+            rent_date,
+            return_date,
+            car_id,
+            user_id,
+            status_id,
+            so.order_type
+            FROM rent_car.orders
+            JOIN rent_car.status_orders so on so.id = orders.status_id
+            WHERE  user_id = ?
+            ORDER BY so.id
+            LIMIT ?, ?
+                    """;
+
     protected static final String FIND_ALL_ORDERS = """
             SELECT orders.id,
             price,
@@ -316,6 +332,12 @@ public final class QueryDao {
             FROM rent_car.orders
             WHERE id = ?
             """;
+    public static final String SQL_FIND_CAR_ID_BY_USER_ID = """
+            SELECT DISTINCT car_id 
+            FROM rent_car.orders
+            where user_id = ? 
+            """;
+
     /**
      * COLUMN NAME
      **/
@@ -344,6 +366,7 @@ public final class QueryDao {
 
     protected static final String REGISTRATION_NUMBER = "registration_number";
     protected static final String COST_BY_CAR = "cost";
+    protected static final String ID_CAR = "car_id";
     protected static final String IMAGE_URL = "image_url";
     protected static final String CAR_STATUS = "cs.status";
     protected static final String TRANSMISSION_TYPE = "tt.type";

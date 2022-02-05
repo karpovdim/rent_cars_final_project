@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public interface OrderService {
+public interface OrderService extends Base {
     Optional<Order> findById(long id) throws ServiceException;
 
     List<Order> findAll() throws ServiceException;
@@ -20,6 +20,8 @@ public interface OrderService {
 
     double countOrders() throws ServiceException;
 
+    double countOrders(long userId) throws ServiceException;
+
     List<Order> findByLimit(int leftBorderUsers, int limitOrdersOnPage) throws ServiceException;
 
     Optional<Order> updateStatus(long parseLong, Order.OrderStatus orderStatus) throws ServiceException;
@@ -29,4 +31,8 @@ public interface OrderService {
     long add(Map<String, String> parameters) throws ServiceException;
 
     List<Order> findByCarId(Long id) throws ServiceException;
+
+    List<Order> findByUserIdAndLimit(Long userId, int leftBorderCars, int limitOrdersOnPage) throws ServiceException;
+
+   // List<Long> findCarsIdByUserId(long userId) throws  ServiceException;
 }

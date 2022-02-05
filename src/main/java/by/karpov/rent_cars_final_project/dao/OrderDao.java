@@ -18,4 +18,8 @@ public interface OrderDao {
     Order update(Order order) throws DaoException;
 
     void delete(Order order) throws DaoException;
+
+    List<Order> findByUserIdAndLimit(Long userId, int leftBorderCars, int limitOrdersOnPage) throws DaoException;
+
+    List<Long> findCarsIdByUserId(long userId) throws DaoException;
 }

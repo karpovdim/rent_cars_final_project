@@ -37,6 +37,7 @@ public final class RequestParameter {
 	public static final String NEW_PASSWORD = "new_password";
 
 	// Car data marker
+	public static final String CAR_MANUFACTURER = "manufacturer";
 	public static final String CAR_ID = "car_id";
 	public static final String CAR_CONDITIONER = "conditioner";
 	public static final String CAR_TRANSMISSION = "transmission";
@@ -56,6 +57,7 @@ public final class RequestParameter {
 	// Error data markers
 	public static final String AUTHENTICATION_ERROR = "authentication_error";
 	public static final String ENTERED_CODE_ERROR = "entered_code_error";
+	public static final String LIST_IS_EMPTY = "list_empty";
 
 	// Incorrect data to changes markers
 	public static final String CHANGE_STATUS_INCORRECT = "change_status_incorrect";
@@ -75,19 +77,13 @@ public final class RequestParameter {
 	// Incorrect data markers
 	public static final String CAR_NOT_FOUND_OF_DELETE = "car_not_found_of_delete";
 	public static  final String DELETE_CAR_INCORRECT = "delete_car_incorrect";
-//	public static final String CHANGE_CARS_STATUS_INCORRECT = "change_car_status_incorrect";
-//	public static final String ORDER_INCORRECT_DATE = "incorrect_date";
-//	public static final String ORDER_PICK_UP_BEFORE_RETURN = "pick_up_date_is_before_return_date";
-//	public static final String INVALID_FILE = "invalid_file";
-//	public static final String INPUT_DATA_INCORRECT = "input_data_incorrect";
-//	public static final String ORDER_ID_INCORRECT = "order_id_incorrect";
-//	public static final String CAR_MANUFACTURER_INCORRECT = "car_manufacturer_incorrect";
 	public static final String INPUT_DATA_CAR_STATUS_INCORRECT = "car_status_incorrect";
 	public static final String INPUT_DATA_CAR_TRANSMISSION_INCORRECT = "car_transmission_type_incorrect";
 	public static final String INPUT_DATA_CAR_COST_INCORRECT = "car_cost_incorrect";
 	public static final String INPUT_DATA_CAR_DESCRIPTION_INCORRECT = "car_description_incorrect";
 	public static final String INPUT_DATA_CAR_REGISTRATION_NUMBER_INCORRECT = "car_registration_number_incorrect";
 	public static final String CAR_EXISTS = "car_exists";
+	public static final String NOT_ENOUGH_MONEY_TO_PAY = "not_enough_money";
 
 	private RequestParameter() {
 	}

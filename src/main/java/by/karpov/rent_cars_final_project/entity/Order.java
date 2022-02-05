@@ -67,7 +67,7 @@ public class Order implements BaseEntity {
         return this.user;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

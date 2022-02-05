@@ -1,13 +1,19 @@
 package by.karpov.rent_cars_final_project.dao.impl;
 
+import by.karpov.rent_cars_final_project.dao.CarDao;
 import by.karpov.rent_cars_final_project.dao.OrderDao;
 import by.karpov.rent_cars_final_project.entity.Car;
 import by.karpov.rent_cars_final_project.entity.Order;
 import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.DaoException;
+import by.karpov.rent_cars_final_project.exception.ServiceException;
+import by.karpov.rent_cars_final_project.service.CarService;
+import by.karpov.rent_cars_final_project.service.impl.CarServiceImpl;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static by.karpov.rent_cars_final_project.command.RequestParameter.CAR_ID;
 import static by.karpov.rent_cars_final_project.dao.impl.QueryDao.*;
 import static by.karpov.rent_cars_final_project.pool.ConnectionPool.pool;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
@@ -23,6 +30,7 @@ import static java.sql.Statement.RETURN_GENERATED_KEYS;
 public class OrderDaoImpl implements OrderDao {
     private static final Logger LOGGER = LogManager.getLogger(OrderDaoImpl.class);
     private static final OrderDao instance = new OrderDaoImpl();
+    private static final String SQL_RETURN_ID = "SELECT LAST_INSERT_ID()";
 
     private OrderDaoImpl() {
     }
@@ -91,14 +99,15 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public Order create(Order order) throws DaoException {
         try (final var connection = pool().getConnection();
-             final var statement = connection.prepareStatement(INSERT_ORDER, RETURN_GENERATED_KEYS);
-             final var resultSet = statement.getGeneratedKeys()) {
-            if (resultSet.next()) {
-                final var id = resultSet.getLong(COLUMN_ID);
-                order.setId(id);
-            }
+             final var statement = connection.prepareStatement(INSERT_ORDER, RETURN_GENERATED_KEYS)) {
             statementOrderSetParameters(order, statement);
             statement.executeUpdate();
+            try(var resultSet = statement.getGeneratedKeys()) {
+                if (resultSet.next()) {
+                    final long id = resultSet.getLong(1);
+                    order.setId(id);
+                }
+            }
         } catch (SQLException e) {
             LOGGER.error("Exception while creating Order [{}]", order, e);
             throw new DaoException("Exception while creating Order ", e);
@@ -123,6 +132,48 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
+    public List<Order> findByUserIdAndLimit(Long userId, int leftBorderCars, int limitOrdersOnPage) throws DaoException {
+        final var orders = new ArrayList<Order>();
+        try (final var connection = pool().getConnection();
+             final var statement = connection.prepareStatement(FIND_ORDERS_BY_USER_ID_AND_LIMIT)) {
+            statement.setLong(1,userId);
+            statement.setInt(2, leftBorderCars);
+            statement.setInt(3, limitOrdersOnPage);
+            try (final var resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    orders.add(buildOrder(resultSet));
+                }
+            } catch (SQLException e) {
+                LOGGER.error("exception in method findByLimit() with user id", e);
+                throw new DaoException("Exception when find orders by limit with user id", e);
+            }
+            return List.copyOf(orders);
+        } catch (SQLException e) {
+            LOGGER.error("exception in method findByLimit()", e);
+            throw new DaoException("Exception when find orders by limit", e);
+        }
+    }
+
+    @Override
+    public List<Long> findCarsIdByUserId(long userId) throws DaoException {
+        LOGGER.info( "method findByUserId()");
+        List<Long> listCarsId = new ArrayList<>();
+        try (Connection connection = pool().getConnection();
+             PreparedStatement statement = connection.prepareStatement(SQL_FIND_CAR_ID_BY_USER_ID)) {
+            statement.setLong(1, userId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    listCarsId.add(resultSet.getLong(ID_CAR));
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.error("exception in method findCarsIdByUserId()", e);
+            throw new DaoException("Exception when find cars id by user id", e);
+        }
+        return listCarsId;
+    }
+
+    @Override
     public Order update(Order order) throws DaoException {
         try (final var connection = pool().getConnection();
              final var statement = connection.prepareStatement(UPDATE_ORDER)) {
@@ -136,7 +187,8 @@ public class OrderDaoImpl implements OrderDao {
         return order;
     }
 
-    private Order buildOrder(ResultSet resultSet) throws SQLException {
+    private Order buildOrder(ResultSet resultSet) throws SQLException{
+        CarService carService = CarServiceImpl.getInstance();
         return Order.builder()
                 .id(resultSet.getLong(COLUMN_ID))
                 .price(resultSet.getBigDecimal(COLUMN_PRICE_ORDER))
