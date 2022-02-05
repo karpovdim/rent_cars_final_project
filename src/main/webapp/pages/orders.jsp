@@ -23,7 +23,7 @@
 				<tbody>
 				<thead>
 					<tr>
-						<th scope="col"><fmt:message key="page.orders.manufacturer" /></th>
+<%--						<th scope="col"><fmt:message key="page.orders.manufacturer" /></th>--%>
 						<th scope="col"><fmt:message key="page.orders.model" /></th>
 						<th scope="col"><fmt:message key="page.orders.pick_up_date" /></th>
 						<th scope="col"><fmt:message key="page.orders.return_date" /></th>
@@ -33,12 +33,13 @@
 				</thead>
 				<c:forEach var="order" items="${orders}">
 					<tr>
-						<td>${map_cars.get(order.getCarId()).getCarManufacturer()}</td>
-						<td>${map_cars.get(order.getCarId()).getModel()}</td>
-						<td>${order.getPickUpDate()}</td>
+<%--						<td>${map_cars.get(order.getCar().getId()).getCarDescription()}</td>--%>
+<%--						<td>${map_cars.get(order.getCarId()).getModel()}</td>--%>
+						<td>${order.getCar().getCarDescription()}</td>
+						<td>${order.getRentDate()}</td>
 						<td>${order.getReturnDate()}</td>
 						<td>${order.getPrice()}</td>
-						<td>${order.getOrderStatus()}</td>
+						<td>${order.getStatus()}</td>
 					</tr>
 				</c:forEach>
 				</tbody>
