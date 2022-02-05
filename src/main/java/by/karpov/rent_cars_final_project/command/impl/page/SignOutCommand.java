@@ -22,7 +22,7 @@ public class SignOutCommand implements Command {
         HttpSession session = request.getSession();
         session.setAttribute(USER, null);
         session.setAttribute(IS_AUTHENTICATED, false);
-       // request.getSession().invalidate();
+        request.getSession().invalidate();
         router = new Router(PagePath.HOME_PAGE_REDIRECT);
         router.setRedirect();
         LOGGER.info("user signs out from the system");
