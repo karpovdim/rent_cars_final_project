@@ -30,4 +30,7 @@ public interface CarService {
     void addCar(Map<String, String> parameters)throws ServiceException;
 
     Optional<Car> findByRegistrationNumber(String regNumber) throws ServiceException;
+
+    List<Car> findByManufacture(String manufacturer) throws ServiceException;
+
 }
