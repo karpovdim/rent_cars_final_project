@@ -1,12 +1,10 @@
 package by.karpov.rent_cars_final_project.command;
 
 
-import by.karpov.rent_cars_final_project.command.impl.CodeEntryCommand;
-import by.karpov.rent_cars_final_project.command.impl.MakeOrderCommand;
-import by.karpov.rent_cars_final_project.command.impl.SignInCommand;
-import by.karpov.rent_cars_final_project.command.impl.SignUpCommand;
+import by.karpov.rent_cars_final_project.command.impl.*;
 import by.karpov.rent_cars_final_project.command.impl.change.*;
 import by.karpov.rent_cars_final_project.command.impl.change.admin.*;
+import by.karpov.rent_cars_final_project.command.impl.find.FindCarByManufacturerCommand;
 import by.karpov.rent_cars_final_project.command.impl.find.FindOrderByIdCommand;
 import by.karpov.rent_cars_final_project.command.impl.page.*;
 import by.karpov.rent_cars_final_project.command.impl.page.admin.*;
@@ -31,6 +29,7 @@ public final class CommandProvider {
         initializeSignUpCommands();
         initializeAdminCommands();
         initializeAdminChangeCommands();
+        initializeUserCommands();
     }
 
     public static CommandProvider getInstance() {
@@ -61,11 +60,14 @@ public final class CommandProvider {
         commands.put(TO_PERSONAL_PROFILE_PAGE_COMMAND, new GoToPersonalProfilePageCommand());
         commands.put(MAKE_ORDER_PAGE, new MakeOrderCommand());
         commands.put(TO_MAKE_ORDER_PAGE_COMMAND, new GoToMakeOrderPageCommand());
-     //   commands.put(PAYMENT_ENTRY_PAGE, new PaymentCommand());
-       // commands.put(TO_PAYMENT_ENTRY_PAGE_COMMAND, new GoToPaymentEntryPageCommand());
-      //  commands.put(FIND_MANUFACTURER_BY_ID_COMMAND, new FindCarByManufacturerCommand());
+        commands.put(PAYMENT_ENTRY_PAGE, new PaymentCommand());
+        commands.put(TO_PAYMENT_ENTRY_PAGE_COMMAND, new GoToPaymentEntryPageCommand());
+        commands.put(FIND_MANUFACTURER_BY_ID_COMMAND, new FindCarByManufacturerCommand());
     }
 
+    private void initializeUserCommands() {
+        commands.put(TO_ORDERS_PAGE_COMMAND, new GoToOrdersPageCommand());
+    }
 
     private void initializeSignUpCommands() {
         commands.put(TO_CODE_ENTRY_PAGE_COMMAND, new GoToCodeEntryPageCommand());
