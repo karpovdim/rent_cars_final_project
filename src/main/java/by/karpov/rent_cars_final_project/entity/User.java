@@ -1,6 +1,9 @@
 package by.karpov.rent_cars_final_project.entity;
 
 public class User implements BaseEntity {
+    public User() {
+    }
+
     public enum UserStatus {
         ACTIVE, BANNED, CONFIRMATION_AWAITING
     }
