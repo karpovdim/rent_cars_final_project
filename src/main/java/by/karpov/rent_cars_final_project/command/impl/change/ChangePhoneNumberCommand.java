@@ -13,6 +13,8 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static by.karpov.rent_cars_final_project.command.SessionAttribute.USER;
+
 public class ChangePhoneNumberCommand implements Command {
 	private static final Logger LOGGER = LogManager.getLogger(ChangePhoneNumberCommand.class);
 
@@ -23,7 +25,10 @@ public class ChangePhoneNumberCommand implements Command {
 		Router router;
 		HttpSession session = request.getSession();
 		final var service = UserServiceImpl.getInstance();
-		User user = (User) session.getAttribute(SessionAttribute.USER);
+		User user = (User) session.getAttribute(USER);
+		if (user == null ) {
+			return new Router(PagePath.ERROR_403_PAGE);
+		}
 		String phoneNumber = request.getParameter(RequestParameter.USER_PHONE_NUMBER);
 		if (service.updatePhoneNumber(user.getId(), phoneNumber)) {
 			user.setPhoneNumber(phoneNumber);

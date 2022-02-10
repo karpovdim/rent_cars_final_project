@@ -34,6 +34,7 @@ public class GoToOrdersPageCommand implements Command {
         Router router;
         HttpSession session = request.getSession();
         session.setAttribute(PREVIOUS_PAGE, PagePath.ORDERS_PAGE_REDIRECT);
+
         String page = request.getParameter(RequestParameter.CURRENT_PAGE_NUMBER);
         int currentPageNumber;
         if (page != null) {
@@ -43,6 +44,9 @@ public class GoToOrdersPageCommand implements Command {
         }
         int leftBorderCars = (LIMIT_ORDERS_ON_PAGE * (currentPageNumber - 1));
         User user = (User) session.getAttribute(USER);
+        if (user == null ) {
+            return new Router(PagePath.ERROR_403_PAGE);
+        }
         try {
             double numberOfOrders = orderService.countOrders(user.getId());
             double maxNumberOfPages = Math.ceil(numberOfOrders / LIMIT_ORDERS_ON_PAGE);

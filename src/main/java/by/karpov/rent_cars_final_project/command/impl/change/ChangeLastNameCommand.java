@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static by.karpov.rent_cars_final_project.command.SessionAttribute.USER;
+
 public class ChangeLastNameCommand implements Command {
 	private static final Logger LOGGER = LogManager.getLogger(ChangeLastNameCommand.class);
 
@@ -22,7 +24,10 @@ public class ChangeLastNameCommand implements Command {
 		Router router;
 		HttpSession session = request.getSession();
 		UserService service = UserServiceImpl.getInstance();
-		User user = (User) session.getAttribute(SessionAttribute.USER);
+		User user = (User) session.getAttribute(USER);
+		if (user == null ) {
+			return new Router(PagePath.ERROR_403_PAGE);
+		}
 		String name = request.getParameter(RequestParameter.USER_LAST_NAME);
 		if (service.updateLastName(user.getId(), name)) {
 			user.setLastName(name);

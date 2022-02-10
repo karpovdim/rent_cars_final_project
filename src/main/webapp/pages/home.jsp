@@ -67,6 +67,7 @@
                 <th scope="col"><fmt:message key="page.home.car" /></th>
                 <th scope="col"><fmt:message key="page.home.transmission" /></th>
                 <th scope="col"><fmt:message key="page.home.cost" /></th>
+                <th scope="col"><fmt:message key="page.home.conditioner" /></th>
                 <c:if test="${is_authenticated == true}">
                 <th scope="col"><fmt:message key="page.home.order" /></th>
                 </c:if>

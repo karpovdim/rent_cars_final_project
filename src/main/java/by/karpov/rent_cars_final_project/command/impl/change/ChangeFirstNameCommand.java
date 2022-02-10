@@ -22,7 +22,10 @@ public class ChangeFirstNameCommand implements Command {
 		Router router;
 		var session = request.getSession();
 		final var service = UserServiceImpl.getInstance();
-		var user = (User) session.getAttribute(USER);
+		User user = (User) session.getAttribute(USER);
+		if (user == null ) {
+			return new Router(PagePath.ERROR_403_PAGE);
+		}
 		var name = request.getParameter(RequestParameter.USER_FIRST_NAME);
 		final var id = user.getId();
 		if (service.updateFirstName(id, name)) {

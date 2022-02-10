@@ -15,6 +15,8 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static by.karpov.rent_cars_final_project.command.SessionAttribute.USER;
+
 public class ChangePasswordCommand implements Command {
 	private static final Logger LOGGER = LogManager.getLogger(ChangePasswordCommand.class);
 
@@ -25,7 +27,10 @@ public class ChangePasswordCommand implements Command {
 		Router router;
 		HttpSession session = request.getSession();
 		UserService service = UserServiceImpl.getInstance();
-		User user = (User) session.getAttribute(SessionAttribute.USER);
+		User user = (User) session.getAttribute(USER);
+		if (user == null ) {
+			return new Router(PagePath.ERROR_403_PAGE);
+		}
 		String newPassword = request.getParameter(RequestParameter.NEW_PASSWORD);
 		String oldPassword = request.getParameter(RequestParameter.OLD_PASSWORD);
 		if (service.updatePassword(user.getEmailLogin(), oldPassword, newPassword)) {

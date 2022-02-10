@@ -26,7 +26,7 @@ public class GoToAdminUsersPageCommand implements Command {
         LOGGER.info("method execute()");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);
-        if (user.getRole() != User.UserRole.ADMIN) {
+        if (user == null || user.getRole() != User.UserRole.ADMIN) {
             return new Router(PagePath.ERROR_403_PAGE);
         }
         Router router;

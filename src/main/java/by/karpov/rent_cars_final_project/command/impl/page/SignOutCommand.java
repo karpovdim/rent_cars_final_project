@@ -3,6 +3,7 @@ package by.karpov.rent_cars_final_project.command.impl.page;
 import by.karpov.rent_cars_final_project.command.Command;
 import by.karpov.rent_cars_final_project.command.PagePath;
 import by.karpov.rent_cars_final_project.controller.Router;
+import by.karpov.rent_cars_final_project.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +20,10 @@ public class SignOutCommand implements Command {
         LOGGER.info("method execute()");
         Router router;
         HttpSession session = request.getSession();
+        User user = (User) session.getAttribute(USER);
+        if (user == null ) {
+            return new Router(PagePath.ERROR_403_PAGE);
+        }
         session.setAttribute(USER, null);
         session.setAttribute(IS_AUTHENTICATED, false);
         request.getSession().invalidate();

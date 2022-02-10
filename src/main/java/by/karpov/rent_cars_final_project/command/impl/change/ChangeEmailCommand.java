@@ -16,6 +16,8 @@ import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static by.karpov.rent_cars_final_project.command.SessionAttribute.USER;
+
 public class ChangeEmailCommand implements Command {
 	private static final Logger LOGGER = LogManager.getLogger(ChangeEmailCommand.class);
 
@@ -26,7 +28,10 @@ public class ChangeEmailCommand implements Command {
 		Router router;
 		HttpSession session = request.getSession();
 		UserService service = UserServiceImpl.getInstance();
-		User user = (User) session.getAttribute(SessionAttribute.USER);
+		User user = (User) session.getAttribute(USER);
+		if (user == null ) {
+			return new Router(PagePath.ERROR_403_PAGE);
+		}
 		String email = request.getParameter(RequestParameter.USER_EMAIL);
 		String password = request.getParameter(RequestParameter.USER_PASSWORD);
 		final var newEmail = request.getParameter(RequestParameter.NEW_USER_EMAIL);

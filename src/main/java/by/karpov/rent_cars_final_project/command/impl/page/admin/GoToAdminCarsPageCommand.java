@@ -26,7 +26,7 @@ public class GoToAdminCarsPageCommand implements Command {
         LOGGER.info("method execute()");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);
-        if (user == null || user.getRole() != User.UserRole.ADMIN) { //TODO
+        if (user == null || user.getRole() != User.UserRole.ADMIN) {
             return new Router(PagePath.ERROR_403_PAGE);
         }
         Router router;

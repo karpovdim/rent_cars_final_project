@@ -22,7 +22,7 @@ public class DeleteCarCommand implements Command {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(SessionAttribute.USER);
          final var validator = InputDataValidator.getInstance();
-        if (!validator.isActiveAdmin(user)) {
+        if (user == null || !validator.isActiveAdmin(user)) {
             return new Router(PagePath.ERROR_403_PAGE);
         }
         try {

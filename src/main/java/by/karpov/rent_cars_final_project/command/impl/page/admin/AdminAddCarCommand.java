@@ -29,7 +29,7 @@ public class AdminAddCarCommand implements Command {
         final var session = request.getSession();
         final var user = (User) session.getAttribute(SessionAttribute.USER);
         final var validator = InputDataValidator.getInstance();
-        if (!validator.isActiveAdmin(user)) {
+        if (user == null || !validator.isActiveAdmin(user)) {
             return new Router(PagePath.ERROR_403_PAGE);
         }
         Map<String, String> parameters = new HashMap<>();

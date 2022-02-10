@@ -18,14 +18,14 @@ import org.apache.logging.log4j.Logger;
 public class DeleteUserCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(DeleteUserCommand.class);
     private final UserService userServiceImpl = UserServiceImpl.getInstance();
-    private final InputDataValidator validator = InputDataValidator.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
         Router router;
         HttpSession session = request.getSession();
+        InputDataValidator validator = InputDataValidator.getInstance();
         User user = (User) session.getAttribute(SessionAttribute.USER);
-        if (!validator.isActiveAdmin(user)) {
+        if (user == null || !validator.isActiveAdmin(user)) {
             return new Router(PagePath.ERROR_403_PAGE);
         }
         try {

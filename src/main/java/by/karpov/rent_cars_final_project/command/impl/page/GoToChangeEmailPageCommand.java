@@ -5,11 +5,14 @@ import by.karpov.rent_cars_final_project.command.PagePath;
 import by.karpov.rent_cars_final_project.command.SessionAttribute;
 import by.karpov.rent_cars_final_project.command.impl.page.admin.GoToAdminAddCarPageCommand;
 import by.karpov.rent_cars_final_project.controller.Router;
+import by.karpov.rent_cars_final_project.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import static by.karpov.rent_cars_final_project.command.SessionAttribute.USER;
 
 public class GoToChangeEmailPageCommand implements Command {
 	private static final Logger LOGGER = LogManager.getLogger(GoToChangeEmailPageCommand.class);
@@ -19,6 +22,10 @@ public class GoToChangeEmailPageCommand implements Command {
 	public Router execute(HttpServletRequest request) {
 		LOGGER.info("method execute()");
 		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(USER);
+		if (user == null ) {
+			return new Router(PagePath.ERROR_403_PAGE);
+		}
 		session.setAttribute(SessionAttribute.PREVIOUS_PAGE, PagePath.CHANGE_EMAIL_REDIRECT);
 		return new Router(PagePath.CHANGE_EMAIL_PAGE);
 	}

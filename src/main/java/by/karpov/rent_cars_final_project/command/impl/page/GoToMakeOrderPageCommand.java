@@ -6,6 +6,7 @@ import by.karpov.rent_cars_final_project.command.RequestParameter;
 import by.karpov.rent_cars_final_project.command.SessionAttribute;
 import by.karpov.rent_cars_final_project.controller.Router;
 import by.karpov.rent_cars_final_project.entity.Car;
+import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
 import by.karpov.rent_cars_final_project.service.impl.CarServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +17,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 
+import static by.karpov.rent_cars_final_project.command.SessionAttribute.USER;
+
 public class GoToMakeOrderPageCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(GoToMakeOrderPageCommand.class);
 
@@ -24,6 +27,10 @@ public class GoToMakeOrderPageCommand implements Command {
         LOGGER.info("method execute()");
         Router router;
         HttpSession session = request.getSession();
+        User user = (User) session.getAttribute(USER);
+        if (user == null ) {
+            return new Router(PagePath.ERROR_403_PAGE);
+        }
         CarServiceImpl service = CarServiceImpl.getInstance();
         String carId = request.getParameter(RequestParameter.CAR_ID);
         session.setAttribute(SessionAttribute.PREVIOUS_PAGE,

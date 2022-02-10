@@ -25,7 +25,7 @@ public class ChangeCarCostCommand implements Command {
 		Router router;
 		final var  session = request.getSession();
 		final var user = (User) session.getAttribute(SessionAttribute.USER);
-		if (!validator.isActiveAdmin(user)) {
+		if (user == null || !validator.isActiveAdmin(user)) {
 			return new Router(PagePath.ERROR_403_PAGE);
 		}
 		final var carId = request.getParameter(RequestParameter.CAR_ID);

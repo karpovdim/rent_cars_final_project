@@ -6,6 +6,7 @@ import by.karpov.rent_cars_final_project.command.SessionAttribute;
 import by.karpov.rent_cars_final_project.controller.Router;
 import by.karpov.rent_cars_final_project.entity.Car;
 import by.karpov.rent_cars_final_project.entity.Order;
+import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
 import by.karpov.rent_cars_final_project.service.CarService;
 import by.karpov.rent_cars_final_project.service.OrderPaymentService;
@@ -21,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Optional;
 
 import static by.karpov.rent_cars_final_project.command.RequestParameter.NOT_ENOUGH_MONEY_TO_PAY;
+import static by.karpov.rent_cars_final_project.command.SessionAttribute.USER;
 
 public class PaymentCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(PaymentCommand.class);
@@ -32,6 +34,10 @@ public class PaymentCommand implements Command {
         LOGGER.info("method execute()");
         Router router;
         HttpSession session = request.getSession();
+        User user = (User) session.getAttribute(USER);
+        if (user == null ) {
+            return new Router(PagePath.ERROR_403_PAGE);
+        }
         String cardNumber = request.getParameter(CARD_NUMBER);
         String cvv = request.getParameter(CVV);
         long orderId = (long) session.getAttribute(SessionAttribute.ORDER_ID);

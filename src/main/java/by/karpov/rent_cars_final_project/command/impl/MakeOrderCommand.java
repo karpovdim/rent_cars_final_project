@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static by.karpov.rent_cars_final_project.command.RequestParameter.*;
+import static by.karpov.rent_cars_final_project.command.SessionAttribute.USER;
 
 public class MakeOrderCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(CodeEntryCommand.class);
@@ -35,7 +36,10 @@ public class MakeOrderCommand implements Command {
         Map<String, String> parameters = new HashMap<>();
         Router router;
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(SessionAttribute.USER);
+        User user = (User) session.getAttribute(USER);
+        if (user == null ) {
+            return new Router(PagePath.ERROR_403_PAGE);
+        }
         Car car = (Car) session.getAttribute(SessionAttribute.CAR);
 
         String rentDateParameters = request.getParameter(RENT_DATE);

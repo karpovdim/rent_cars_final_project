@@ -86,7 +86,7 @@ public class InputDataValidator {
     }
 
     public boolean isAdmin(User user) {
-        return ADMIN.equals(user.getRole());
+        return  ADMIN.equals(user.getRole() ) ;
     }
 
     public boolean isCanBeDelete(User user, Long id) {

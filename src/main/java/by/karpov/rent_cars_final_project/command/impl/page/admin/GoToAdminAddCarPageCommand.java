@@ -20,7 +20,7 @@ public class GoToAdminAddCarPageCommand implements Command {
         LOGGER.info("method execute()");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);
-        if (user.getRole() != User.UserRole.ADMIN) {
+        if (user == null || user.getRole() != User.UserRole.ADMIN) {
             return new Router(PagePath.ERROR_403_PAGE);
         }
         session.setAttribute(PREVIOUS_PAGE, PagePath.ADMIN_ADD_CAR_REDIRECT);

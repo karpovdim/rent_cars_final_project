@@ -8,6 +8,7 @@ import by.karpov.rent_cars_final_project.entity.Order;
 import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
 import by.karpov.rent_cars_final_project.service.impl.OrderServiceImpl;
+import by.karpov.rent_cars_final_project.validator.InputDataValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
@@ -26,7 +27,8 @@ public class GoToAdminOrdersPageCommand implements Command {
         LOGGER.info("method execute()");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);
-        if (user.getRole() != User.UserRole.ADMIN) {
+        final var validator = InputDataValidator.getInstance();
+        if (user == null || !validator.isAdmin(user)) {
             return new Router(PagePath.ERROR_403_PAGE);
         }
         Router router;
@@ -54,4 +56,6 @@ public class GoToAdminOrdersPageCommand implements Command {
         }
         return router;
     }
+
+
 }
