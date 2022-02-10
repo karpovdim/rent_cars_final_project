@@ -300,6 +300,19 @@ public final class QueryDao {
             JOIN rent_car.status_orders so on so.id = orders.status_id
             """;
 
+    protected static final String FIND_ALL_ORDERS_WITH_STATUS = """
+            SELECT orders.id,
+            price,
+            rent_date,
+            return_date,
+            car_id,
+            user_id,
+            status_id,
+            so.order_type
+            FROM rent_car.orders
+            JOIN rent_car.status_orders so on so.id = orders.status_id WHERE status = ?
+            """;
+
     protected static final String FIND_BY_ID_ORDER = FIND_ALL_ORDERS + """
             WHERE
             orders.id = ?

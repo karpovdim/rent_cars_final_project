@@ -7,6 +7,9 @@ import java.time.Period;
 
 
 public class Order implements BaseEntity {
+    public Order(int id) {
+    }
+
     public enum OrderStatus {
         PAID, AWAITS_PAYMENT, DECLINED
     }
@@ -19,7 +22,7 @@ public class Order implements BaseEntity {
     private Car car;
     private User user;
 
-    Order(Long id, BigDecimal price, LocalDate rentDate, LocalDate returnDate, OrderStatus status, Car car, User user) {
+    public Order(Long id, BigDecimal price, LocalDate rentDate, LocalDate returnDate, OrderStatus status, Car car, User user) {
         this.id = id;
         this.price = price;
         this.rentDate = rentDate;

@@ -34,5 +34,4 @@ public interface OrderService extends Base {
 
     List<Order> findByUserIdAndLimit(Long userId, int leftBorderCars, int limitOrdersOnPage) throws ServiceException;
 
-   // List<Long> findCarsIdByUserId(long userId) throws  ServiceException;
 }
