@@ -26,7 +26,6 @@ public class SignUpCommand implements Command {
     private final CodeGenerator codeGenerator = CodeGenerator.getInstance();
     private final String hashPassword = codeGenerator.generateCodeToRegistration();
 
-
     @Override
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");

@@ -27,7 +27,7 @@ public interface CarService {
 
     Optional<Car> updateCost(long carId, BigDecimal cost) throws ServiceException;
 
-    void addCar(Map<String, String> parameters)throws ServiceException;
+    boolean addCar(Map<String, String> parameters)throws ServiceException;
 
     Optional<Car> findByRegistrationNumber(String regNumber) throws ServiceException;
 

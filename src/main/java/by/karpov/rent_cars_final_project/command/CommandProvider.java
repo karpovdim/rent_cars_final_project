@@ -18,7 +18,6 @@ import static by.karpov.rent_cars_final_project.command.CommandType.*;
 
 public final class CommandProvider {
     private static final Logger LOGGER = LogManager.getLogger(CommandProvider.class);
-
     private static final CommandProvider INSTANCE = new CommandProvider();
     private final EnumMap<CommandType, Command> commands = new EnumMap(CommandType.class);
 

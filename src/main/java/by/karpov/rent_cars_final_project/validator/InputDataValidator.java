@@ -18,26 +18,11 @@ public class InputDataValidator {
     private static final String PASSWORD_REGEX = "^[^<>]{5,64}$";
     private static final String DESCRIPTION_REGEX = "^[^<>]{0,64}$";
     private static final String REGISTRATION_NUMBER_REGEX = "^\\d{4}\\w{2}$";
-
-
     private static final String NAME_REGEX = "[a-zA-Z]+|[а-яА-ЯёЁ]+";
-
     private static final int MAX_LENGTH_NAME = 20;
-
     private static final String PHONE_NUMBER_REGEX = "^[25|44|33|29]\\d{8}";
-
     private static final String CARD_NUMBER_REGEX = "^\\d{16}$";
-
     private static final String CVV_REGEX = "^\\d{3}$";
-
-    private static final String CAR_MODEL_REGEX = "^[\\w{1,50}\\s]+$";
-
-    private static final String CAR_YEAR_REGEX = "^\\d{4}$";
-
-    private static final String CAR_COST_REGEX = "^[\\d]*[.,]?[\\d]+$";
-
-    private static final String CAR_DISCOUNT_REGEX = "^\\d{1,2}$";
-
     private static final String CODE_AUTHENTICATION_REGEX = "^\\d{4}$";
 
     private InputDataValidator() {
@@ -72,14 +57,12 @@ public class InputDataValidator {
         return password.matches(PASSWORD_REGEX);
     }
 
-
     public boolean isNameValid(String name) {
         if (name == null || name.isBlank()) {
             return false;
         }
         return name.length() <= MAX_LENGTH_NAME && name.matches(NAME_REGEX);
     }
-
 
     public boolean isPhoneNumberValid(String phoneNumber) {
         if (phoneNumber == null || phoneNumber.isBlank()) {
@@ -88,7 +71,6 @@ public class InputDataValidator {
         return phoneNumber.matches(PHONE_NUMBER_REGEX);
     }
 
-
     public boolean isCardNumberValid(String cardNumber) {
         if (cardNumber == null || cardNumber.isBlank()) {
             return false;
@@ -96,17 +78,11 @@ public class InputDataValidator {
         return cardNumber.matches(CARD_NUMBER_REGEX);
     }
 
-
     public boolean isCvvValid(String cvv) {
         if (cvv == null || cvv.isBlank()) {
             return false;
         }
         return cvv.matches(CVV_REGEX);
-    }
-
-
-    public boolean isCarDataValid(String model, String year, String cost, String discount) {
-        return isCarModelValid(model) && isCarYearValid(year) && isCarCostValid(cost) && isCarDiscountValid(discount);
     }
 
     public boolean isAdmin(User user) {
@@ -117,44 +93,12 @@ public class InputDataValidator {
         return !user.getId().equals(id);
     }
 
-    private boolean isCarModelValid(String model) {
-        if (model == null || model.isBlank()) {
-            return false;
-        }
-        return model.matches(CAR_MODEL_REGEX);
-    }
-
-
-    private boolean isCarYearValid(String year) {
-        if (year == null || year.isBlank()) {
-            return false;
-        }
-        return year.matches(CAR_YEAR_REGEX);
-    }
-
-
-    private boolean isCarCostValid(String cost) {
-        if (cost == null || cost.isBlank()) {
-            return false;
-        }
-        return cost.matches(CAR_COST_REGEX);
-    }
-
-
-    private boolean isCarDiscountValid(String discount) {
-        if (discount == null || discount.isBlank()) {
-            return false;
-        }
-        return discount.matches(CAR_DISCOUNT_REGEX);
-    }
-
     public boolean isCodeValid(String code) {
         if (code == null || code.isBlank()) {
             return false;
         }
         return code.matches(CODE_AUTHENTICATION_REGEX);
     }
-
     public boolean isStatusUserPresent(String status) {
         return EnumUtils.isValidEnum(User.UserStatus.class, status);
     }

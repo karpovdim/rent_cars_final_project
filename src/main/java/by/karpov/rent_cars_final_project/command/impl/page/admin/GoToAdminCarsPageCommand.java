@@ -19,7 +19,6 @@ import static by.karpov.rent_cars_final_project.command.SessionAttribute.*;
 
 public class GoToAdminCarsPageCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(GoToAdminAddCarPageCommand.class);
-
     private static final int LIMIT_ORDERS_ON_PAGE = 3;
 
     @Override
@@ -27,7 +26,7 @@ public class GoToAdminCarsPageCommand implements Command {
         LOGGER.info("method execute()");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);
-        if ( user == null || user.getRole() != User.UserRole.ADMIN) {
+        if (user == null || user.getRole() != User.UserRole.ADMIN) { //TODO
             return new Router(PagePath.ERROR_403_PAGE);
         }
         Router router;

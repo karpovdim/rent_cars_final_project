@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 
 public class ChangeLanguageToEnglishCommand implements Command {
 	private static final Logger LOGGER = LogManager.getLogger(ChangeLanguageToEnglishCommand.class);
-
 	private static final String ENGLISH = "en";
 
 	@Override

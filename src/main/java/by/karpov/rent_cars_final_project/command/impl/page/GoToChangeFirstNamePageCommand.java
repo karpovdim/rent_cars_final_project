@@ -11,13 +11,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class GoToChangeFirstNamePageCommand implements Command {
-	private static final Logger logger = LogManager.getLogger();
-	
-	@Override
-	public Router execute(HttpServletRequest request) {
-		logger.log(Level.INFO, "method execute()");
-		HttpSession session = request.getSession();
-		session.setAttribute(SessionAttribute.PREVIOUS_PAGE, PagePath.CHANGE_FIRST_NAME_REDIRECT);
-		return new Router(PagePath.CHANGE_FIRST_NAME_PAGE);
-	}
+    private static final Logger LOGGER = LogManager.getLogger(GoToChangeFirstNamePageCommand.class);
+
+
+    @Override
+    public Router execute(HttpServletRequest request) {
+        LOGGER.info("method execute()");
+        HttpSession session = request.getSession();
+        session.setAttribute(SessionAttribute.PREVIOUS_PAGE, PagePath.CHANGE_FIRST_NAME_REDIRECT);
+        return new Router(PagePath.CHANGE_FIRST_NAME_PAGE);
+    }
 }

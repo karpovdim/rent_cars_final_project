@@ -22,5 +22,4 @@ public class ChangeLanguageToRussianCommand implements Command {
 		LOGGER.info("language was changed to Russian");
 		return router;
 	}
-
 }

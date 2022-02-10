@@ -16,7 +16,6 @@ import static by.karpov.rent_cars_final_project.command.SessionAttribute.USER;
 public class ChangeFirstNameCommand implements Command {
 	private static final Logger LOGGER = LogManager.getLogger(DeleteUserCommand.class);
 
-
 	@Override
 	public Router execute(HttpServletRequest request) {
 		LOGGER.info( "method execute()");

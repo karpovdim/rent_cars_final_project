@@ -28,10 +28,10 @@ public class DeleteUserCommand implements Command {
         if (!validator.isActiveAdmin(user)) {
             return new Router(PagePath.ERROR_403_PAGE);
         }
-
         try {
             long userId = Long.parseLong(request.getParameter(RequestParameter.USER_ID));
             if (validator.isIdValid(userId) && !validator.isCanBeDelete(user, userId)) {
+                LOGGER.info("method delete user");
                 request.setAttribute(RequestParameter.DELETE_USER_INCORRECT, true);
                 return new Router(PagePath.ADMIN_USERS_PAGE);
             }
@@ -42,6 +42,7 @@ public class DeleteUserCommand implements Command {
                 router = new Router(PagePath.ADMIN_USERS_REDIRECT);
                 router.setRedirect();
             } else {
+                LOGGER.info("user not found for delete");
                 request.setAttribute(RequestParameter.USER_NOT_FOUND_OF_DELETE, true);
                 return new Router(PagePath.ADMIN_USERS_PAGE);
             }

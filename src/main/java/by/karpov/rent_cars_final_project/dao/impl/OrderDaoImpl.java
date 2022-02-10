@@ -30,8 +30,6 @@ import static java.sql.Statement.RETURN_GENERATED_KEYS;
 public class OrderDaoImpl implements OrderDao {
     private static final Logger LOGGER = LogManager.getLogger(OrderDaoImpl.class);
     private static final OrderDao instance = new OrderDaoImpl();
-    private static final String SQL_RETURN_ID = "SELECT LAST_INSERT_ID()";
-
     private OrderDaoImpl() {
     }
 

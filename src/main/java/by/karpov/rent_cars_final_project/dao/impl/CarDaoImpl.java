@@ -80,14 +80,16 @@ public class CarDaoImpl implements CarDao {
     @Override
     public Car create(Car car) throws DaoException {
         try (final var connection = pool().getConnection();
-             final var statement = connection.prepareStatement(INSERT_CAR, RETURN_GENERATED_KEYS);
-             final var resultSet = statement.getGeneratedKeys()) {
-            if (resultSet.next()) {
-                final var id = resultSet.getLong(COLUMN_ID);
-                car.setId(id);
-            }
+             final var statement = connection.prepareStatement(INSERT_CAR, RETURN_GENERATED_KEYS);) {
+
             statementCarSetParameters(car, statement);
             statement.executeUpdate();
+            try(var resultSet = statement.getGeneratedKeys()) {
+                if (resultSet.next()) {
+                    final var id = resultSet.getLong(1);
+                    car.setId(id);
+                }
+            }
         } catch (SQLException e) {
             LOGGER.error("Error while creating Car [{}]", car,e);
             throw new DaoException("Error while creating Car ",e);

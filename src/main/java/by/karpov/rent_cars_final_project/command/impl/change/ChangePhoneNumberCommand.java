@@ -14,11 +14,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ChangePhoneNumberCommand implements Command {
-	private static final Logger logger = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(ChangePhoneNumberCommand.class);
+
 
 	@Override
 	public Router execute(HttpServletRequest request) {
-		logger.log(Level.INFO, "method execute()");
+		LOGGER.info( "method execute()");
 		Router router;
 		HttpSession session = request.getSession();
 		final var service = UserServiceImpl.getInstance();
@@ -29,9 +30,9 @@ public class ChangePhoneNumberCommand implements Command {
 			session.setAttribute(SessionAttribute.USER, user);
 			router = new Router(PagePath.HOME_PAGE_REDIRECT);
 			router.setRedirect();
-			logger.log(Level.INFO, "the phone number was changed successfully");
+			LOGGER.info("the phone number was changed successfully");
 		} else {
-			logger.log(Level.INFO, "entered data is incorrect");
+			LOGGER.info("entered data is incorrect");
 			router = new Router(PagePath.CHANGE_PHONE_NUMBER_PAGE);
 			request.setAttribute(RequestParameter.CHANGE_ERROR, true);
 		}

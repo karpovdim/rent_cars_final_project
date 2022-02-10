@@ -12,7 +12,6 @@ import org.apache.logging.log4j.Logger;
 public class GoToSignInPageCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(GoToSignInPageCommand.class);
 
-
     @Override
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");

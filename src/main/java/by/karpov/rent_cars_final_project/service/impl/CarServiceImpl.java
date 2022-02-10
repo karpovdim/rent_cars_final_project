@@ -120,6 +120,7 @@ public class CarServiceImpl implements CarService {
             throw new ServiceException("Exception when find user by limit", e);
         }
     }
+
     @Override
     public Optional<Car> updateStatus(long carId, Car.CarStatus carStatus) throws ServiceException {
         LOGGER.info("method updateStatus() Car");
@@ -134,7 +135,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Optional<Car> updateCost(long carId, BigDecimal cost ) throws ServiceException {
+    public Optional<Car> updateCost(long carId, BigDecimal cost) throws ServiceException {
         LOGGER.info("method updateCost() Car");
         if (validator.isIdValid(carId) && findById(carId).isPresent()) {
             final var car = findById(carId).get();
@@ -146,7 +147,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void addCar(Map<String, String> parameters) throws ServiceException {
+    public boolean addCar(Map<String, String> parameters) throws ServiceException {
         LOGGER.info("method add() Car");
         final var car = Car.builder()
                 .descriptionCar(parameters.get(CAR_DESCRIPTION))
@@ -156,15 +157,16 @@ public class CarServiceImpl implements CarService {
                 .registrationNumber(parameters.get(CAR_REGISTRATION_NUMBER))
                 .cost(BigDecimal.valueOf(Long.parseLong(parameters.get(CAR_COST))))
                 .build();
-        create(car);
+    return true;
     }
+
 
     @Override
     public Optional<Car> findByRegistrationNumber(String regNumber) throws ServiceException {
         LOGGER.info("method findByRegistrationNumber() Car");
         final Optional<Car> optionalCar;
         try {
-            optionalCar = carDaoImpl.findByRegistrationNumber( regNumber);
+            optionalCar = carDaoImpl.findByRegistrationNumber(regNumber);
         } catch (DaoException e) {
             LOGGER.error("Error while find by RegistrationNumber [{}]", regNumber);
             throw new ServiceException(e);
