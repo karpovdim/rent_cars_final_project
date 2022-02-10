@@ -24,39 +24,39 @@ import java.util.Map;
 import static by.karpov.rent_cars_final_project.command.SessionAttribute.*;
 
 public class GoToOrdersPageCommand implements Command {
-	private static final Logger logger = LogManager.getLogger();
-	private static final int LIMIT_ORDERS_ON_PAGE = 3;
-	private final OrderService orderService = OrderServiceImpl.getInstance();
+    private static final Logger LOGGER = LogManager.getLogger(GoToOrdersPageCommand.class);
+    private static final int LIMIT_ORDERS_ON_PAGE = 3;
+    private final OrderService orderService = OrderServiceImpl.getInstance();
 
-	@Override
-	public Router execute(HttpServletRequest request) {
-		logger.log(Level.INFO, "method execute()");
-		Router router;
-		HttpSession session = request.getSession();
-		session.setAttribute(PREVIOUS_PAGE, PagePath.ORDERS_PAGE_REDIRECT);
-		String page = request.getParameter(RequestParameter.CURRENT_PAGE_NUMBER);
-		int currentPageNumber;
-		if (page != null) {
-			currentPageNumber = Integer.parseInt(page);
-		} else {
-			currentPageNumber = 1;
-		}
-		int leftBorderCars = (LIMIT_ORDERS_ON_PAGE * (currentPageNumber - 1));
-		User user = (User) session.getAttribute(USER);
-		try {
-			double numberOfOrders = orderService.countOrders(user.getId());
-			double maxNumberOfPages = Math.ceil(numberOfOrders / LIMIT_ORDERS_ON_PAGE);
-			List<Order> orders = orderService.findByUserIdAndLimit(user.getId(), leftBorderCars, LIMIT_ORDERS_ON_PAGE);
-			session.setAttribute(CURRENT_PAGE_NUMBER, currentPageNumber);
-			session.setAttribute(MAX_NUMBER_OF_PAGES, maxNumberOfPages);
-			session.setAttribute(RequestParameter.LIST_ORDERS, orders);
+    @Override
+    public Router execute(HttpServletRequest request) {
+        LOGGER.info("method execute()");
+        Router router;
+        HttpSession session = request.getSession();
+        session.setAttribute(PREVIOUS_PAGE, PagePath.ORDERS_PAGE_REDIRECT);
+        String page = request.getParameter(RequestParameter.CURRENT_PAGE_NUMBER);
+        int currentPageNumber;
+        if (page != null) {
+            currentPageNumber = Integer.parseInt(page);
+        } else {
+            currentPageNumber = 1;
+        }
+        int leftBorderCars = (LIMIT_ORDERS_ON_PAGE * (currentPageNumber - 1));
+        User user = (User) session.getAttribute(USER);
+        try {
+            double numberOfOrders = orderService.countOrders(user.getId());
+            double maxNumberOfPages = Math.ceil(numberOfOrders / LIMIT_ORDERS_ON_PAGE);
+            List<Order> orders = orderService.findByUserIdAndLimit(user.getId(), leftBorderCars, LIMIT_ORDERS_ON_PAGE);
+            session.setAttribute(CURRENT_PAGE_NUMBER, currentPageNumber);
+            session.setAttribute(MAX_NUMBER_OF_PAGES, maxNumberOfPages);
+            session.setAttribute(RequestParameter.LIST_ORDERS, orders);
 
-			router = new Router(PagePath.ORDERS_PAGE);
-		} catch (ServiceException e) {
-			logger.log(Level.ERROR, "error on orders page: ", e);
-			router = new Router(PagePath.ERROR_500_PAGE);
-		}
-		return router;
-	}
+            router = new Router(PagePath.ORDERS_PAGE);
+        } catch (ServiceException e) {
+            LOGGER.error("error on orders page: ", e);
+            router = new Router(PagePath.ERROR_500_PAGE);
+        }
+        return router;
+    }
 
 }

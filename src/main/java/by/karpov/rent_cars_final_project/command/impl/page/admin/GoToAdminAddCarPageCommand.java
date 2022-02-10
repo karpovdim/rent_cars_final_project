@@ -15,7 +15,6 @@ import static by.karpov.rent_cars_final_project.command.SessionAttribute.USER;
 public class GoToAdminAddCarPageCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(GoToAdminAddCarPageCommand.class);
 
-
     @Override
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");

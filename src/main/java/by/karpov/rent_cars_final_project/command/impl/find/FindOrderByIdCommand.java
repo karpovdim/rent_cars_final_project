@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 public class FindOrderByIdCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(ChangeUserRoleCommand.class);
 
-
     @Override
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");

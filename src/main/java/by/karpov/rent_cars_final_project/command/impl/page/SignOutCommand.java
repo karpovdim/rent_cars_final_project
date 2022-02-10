@@ -14,7 +14,6 @@ import static by.karpov.rent_cars_final_project.command.SessionAttribute.USER;
 public class SignOutCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(SignOutCommand.class);
 
-
     @Override
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");
@@ -28,5 +27,4 @@ public class SignOutCommand implements Command {
         LOGGER.info("user signs out from the system");
         return router;
     }
-
 }

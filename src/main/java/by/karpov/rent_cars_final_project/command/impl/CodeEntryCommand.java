@@ -17,34 +17,33 @@ import java.util.Optional;
 import static by.karpov.rent_cars_final_project.entity.User.UserStatus.ACTIVE;
 
 public class CodeEntryCommand implements Command {
-	private static final Logger LOGGER = LogManager.getLogger(CodeEntryCommand.class);
+    private static final Logger LOGGER = LogManager.getLogger(CodeEntryCommand.class);
 
-
-	@Override
-	public Router execute(HttpServletRequest request) {
-		LOGGER.info("method execute()");
-		Router router;
-		UserService userServiceImpl = UserServiceImpl.getInstance();
-		String enteredCode = request.getParameter(RequestParameter.CODE);
-		try {
-			Optional<User> userOptional = userServiceImpl.findByPasswordForAuthentication(enteredCode);
-			if (userOptional.isPresent()) {
-				final var user = userOptional.get();
-				user.setUserStatus(ACTIVE);
-				userServiceImpl.update(user);
-				userServiceImpl.updatePasswordForAuthentication(user.getId(), null);
-				router = new Router(PagePath.HOME_PAGE_REDIRECT);
-				router.setRedirect();
-				LOGGER.info("the code is confirmed. Status changed to active");
-			} else {
-				LOGGER.error("the entered code is incorrect");
-				request.setAttribute(RequestParameter.ENTERED_CODE_ERROR, true);
-				router = new Router(PagePath.CODE_PAGE);
-			}
-		} catch (ServiceException e) {
-			LOGGER.error("error while entering code", e);
-			router = new Router(PagePath.ERROR_500_PAGE);
-		}
-		return router;
-	}
+    @Override
+    public Router execute(HttpServletRequest request) {
+        LOGGER.info("method execute()");
+        Router router;
+        UserService userServiceImpl = UserServiceImpl.getInstance();
+        String enteredCode = request.getParameter(RequestParameter.CODE);
+        try {
+            Optional<User> userOptional = userServiceImpl.findByPasswordForAuthentication(enteredCode);
+            if (userOptional.isPresent()) {
+                final var user = userOptional.get();
+                user.setUserStatus(ACTIVE);
+                userServiceImpl.update(user);
+                userServiceImpl.updatePasswordForAuthentication(user.getId(), null);
+                router = new Router(PagePath.HOME_PAGE_REDIRECT);
+                router.setRedirect();
+                LOGGER.info("the code is confirmed. Status changed to active");
+            } else {
+                LOGGER.error("the entered code is incorrect");
+                request.setAttribute(RequestParameter.ENTERED_CODE_ERROR, true);
+                router = new Router(PagePath.CODE_PAGE);
+            }
+        } catch (ServiceException e) {
+            LOGGER.error("error while entering code", e);
+            router = new Router(PagePath.ERROR_500_PAGE);
+        }
+        return router;
+    }
 }

@@ -11,11 +11,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class GoToChangeLastNamePageCommand implements Command {
-	private static final Logger logger = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(GoToChangeLastNamePageCommand.class);
+
 
 	@Override
 	public Router execute(HttpServletRequest request) {
-		logger.log(Level.INFO, "method execute()");
+		LOGGER.info("method execute()");
 		HttpSession session = request.getSession();
 		session.setAttribute(SessionAttribute.PREVIOUS_PAGE, PagePath.CHANGE_LAST_NAME_REDIRECT);
 		return new Router(PagePath.CHANGE_LAST_NAME_PAGE);

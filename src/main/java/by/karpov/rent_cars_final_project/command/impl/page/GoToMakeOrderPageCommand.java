@@ -17,31 +17,31 @@ import org.apache.logging.log4j.Logger;
 import java.util.Optional;
 
 public class GoToMakeOrderPageCommand implements Command {
-	private static final Logger logger = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger(GoToMakeOrderPageCommand.class);
 
-	@Override
-	public Router execute(HttpServletRequest request) {
-		logger.log(Level.INFO, "method execute()");
-		Router router;
-		HttpSession session = request.getSession();
-		CarServiceImpl service = CarServiceImpl.getInstance();
-		String carId = request.getParameter(RequestParameter.CAR_ID);
-		session.setAttribute(SessionAttribute.PREVIOUS_PAGE,
-				PagePath.MAKE_ORDER_REDIRECT + "&" + RequestParameter.CAR_ID + "=" + carId);
-		try {
-			Optional<Car> optionalCar = service.findById(Long.parseLong(carId));
-			if (optionalCar.isPresent()) {
-				Car car = optionalCar.get();
-				router = new Router(PagePath.MAKE_ORDER_PAGE);
-				session.setAttribute(SessionAttribute.CAR, car);
-			} else {
-				logger.log(Level.ERROR, "car is not found");
-				router = new Router(PagePath.ERROR_404_PAGE);
-			}
-		} catch (ServiceException e) {
-			logger.log(Level.ERROR, "error on home page: ", e);
-			router = new Router(PagePath.ERROR_500_PAGE);
-		}
-		return router;
-	}
+    @Override
+    public Router execute(HttpServletRequest request) {
+        LOGGER.info("method execute()");
+        Router router;
+        HttpSession session = request.getSession();
+        CarServiceImpl service = CarServiceImpl.getInstance();
+        String carId = request.getParameter(RequestParameter.CAR_ID);
+        session.setAttribute(SessionAttribute.PREVIOUS_PAGE,
+                PagePath.MAKE_ORDER_REDIRECT + "&" + RequestParameter.CAR_ID + "=" + carId);
+        try {
+            Optional<Car> optionalCar = service.findById(Long.parseLong(carId));
+            if (optionalCar.isPresent()) {
+                Car car = optionalCar.get();
+                router = new Router(PagePath.MAKE_ORDER_PAGE);
+                session.setAttribute(SessionAttribute.CAR, car);
+            } else {
+                LOGGER.error("car is not found");
+                router = new Router(PagePath.ERROR_404_PAGE);
+            }
+        } catch (ServiceException e) {
+            LOGGER.error("error on home page: ", e);
+            router = new Router(PagePath.ERROR_500_PAGE);
+        }
+        return router;
+    }
 }

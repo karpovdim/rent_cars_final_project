@@ -17,19 +17,21 @@ public class ConnectionPool {
     private static final String USER = PropertiesUtil.getProperty("db.username");
     private static final String PASS = PropertiesUtil.getProperty("db.password");
     private static final String PATH_JDBC_DRIVER = PropertiesUtil.getProperty("mysqlDriver");
+    private static final String DB_POLL_SIZE = "db.poll.size";
     private static final int DEFAULT_POOL_SIZE = 5;
     private static Connection connection;
     private static ConnectionPool instance;
     private static final BlockingQueue<Connection> pool;
     private static final List<Connection> sourceConnection;
 
+
     static {
         try {
             Class.forName(PATH_JDBC_DRIVER);
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e); //TODO: CREATE CUSTOM EXCEPTION
+            throw new RuntimeException(e);
         }
-        final String poolSize = PropertiesUtil.getProperty("db.poll.size");
+        final String poolSize = PropertiesUtil.getProperty(DB_POLL_SIZE);
         int size = poolSize == null ? DEFAULT_POOL_SIZE : Integer.parseInt(poolSize);
         pool = new ArrayBlockingQueue<>(size);
         sourceConnection = new ArrayList<>(size);
@@ -63,11 +65,11 @@ public class ConnectionPool {
             Connection connection = pool.take();
             return connection;
         } catch (InterruptedException ex) {
-            throw new RuntimeException(ex); //TODO: CREATE CUSTOM EXCEPTION
+            throw new RuntimeException(ex);
         }
     }
 
-    public  void closePool() throws DaoException {
+    public  boolean closePool() throws DaoException {
         for (Connection connection : sourceConnection) {
             try {
                 connection.close();
@@ -75,6 +77,7 @@ public class ConnectionPool {
                 throw new DaoException(ex);
             }
         }
+        return true;
     }
 
     private static Connection open() throws DaoException {
