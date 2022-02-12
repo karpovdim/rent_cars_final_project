@@ -93,6 +93,11 @@ alter table orders
         foreign key (user_id) references users (id)
             on delete cascade;
 
+alter table orders
+    add constraint orders_cars_id_fk
+        foreign key (car_id) references cars (id)
+            on delete cascade;
+
 alter table insurances drop foreign key insurances_ibfk_1;
 
 alter table insurances

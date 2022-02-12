@@ -6,6 +6,7 @@ import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
 import by.karpov.rent_cars_final_project.service.impl.CarServiceImpl;
 import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import static by.karpov.rent_cars_final_project.entity.User.UserRole.ADMIN;
@@ -43,50 +44,32 @@ public class InputDataValidator {
     }
 
     public boolean isEmailValid(String email) {
-        if (email == null || email.isBlank()) {
-            return false;
-        }
         EmailValidator validator = EmailValidator.getInstance();
-        return validator.isValid(email);
+        return validator.isValid(email) && StringUtils.isNotBlank(email);
     }
 
     public boolean isPasswordValid(String password) {
-        if (password == null || password.isBlank()) {
-            return false;
-        }
-        return password.matches(PASSWORD_REGEX);
+        return password.matches(PASSWORD_REGEX) && StringUtils.isNotBlank(password);
     }
 
     public boolean isNameValid(String name) {
-        if (name == null || name.isBlank()) {
-            return false;
-        }
-        return name.length() <= MAX_LENGTH_NAME && name.matches(NAME_REGEX);
+        return name.length() <= MAX_LENGTH_NAME && name.matches(NAME_REGEX) && StringUtils.isNotBlank(name);
     }
 
     public boolean isPhoneNumberValid(String phoneNumber) {
-        if (phoneNumber == null || phoneNumber.isBlank()) {
-            return false;
-        }
-        return phoneNumber.matches(PHONE_NUMBER_REGEX);
+        return phoneNumber.matches(PHONE_NUMBER_REGEX) && StringUtils.isNotBlank(phoneNumber);
     }
 
     public boolean isCardNumberValid(String cardNumber) {
-        if (cardNumber == null || cardNumber.isBlank()) {
-            return false;
-        }
-        return cardNumber.matches(CARD_NUMBER_REGEX);
+        return cardNumber.matches(CARD_NUMBER_REGEX) && StringUtils.isNotBlank(cardNumber);
     }
 
     public boolean isCvvValid(String cvv) {
-        if (cvv == null || cvv.isBlank()) {
-            return false;
-        }
-        return cvv.matches(CVV_REGEX);
+        return cvv.matches(CVV_REGEX) && StringUtils.isNotBlank(cvv);
     }
 
     public boolean isAdmin(User user) {
-        return  ADMIN.equals(user.getRole() ) ;
+        return ADMIN.equals(user.getRole());
     }
 
     public boolean isCanBeDelete(User user, Long id) {
@@ -94,11 +77,9 @@ public class InputDataValidator {
     }
 
     public boolean isCodeValid(String code) {
-        if (code == null || code.isBlank()) {
-            return false;
-        }
-        return code.matches(CODE_AUTHENTICATION_REGEX);
+        return code.matches(CODE_AUTHENTICATION_REGEX) && StringUtils.isNotBlank(code);
     }
+
     public boolean isStatusUserPresent(String status) {
         return EnumUtils.isValidEnum(User.UserStatus.class, status);
     }
@@ -136,17 +117,11 @@ public class InputDataValidator {
     }
 
     public boolean isDescriptionValid(String description) {
-        if (description == null || description.isBlank()) {
-            return false;
-        }
-        return description.matches(DESCRIPTION_REGEX);
+        return description.matches(DESCRIPTION_REGEX) && StringUtils.isNotBlank(description);
     }
 
     public boolean isRegNumberValid(String regNumber) {
-        if (regNumber == null || regNumber.isBlank()) {
-            return false;
-        }
-        return regNumber.matches(REGISTRATION_NUMBER_REGEX);
+        return regNumber.matches(REGISTRATION_NUMBER_REGEX) && StringUtils.isNotBlank(regNumber);
     }
 
     public boolean isCarPresent(String regNumber) {
@@ -163,6 +138,7 @@ public class InputDataValidator {
         }
         return false;
     }
+
     public boolean isStatusOrderPresent(String orderStatus) {
         return EnumUtils.isValidEnum(Order.OrderStatus.class, orderStatus);
     }

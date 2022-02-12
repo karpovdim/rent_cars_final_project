@@ -1,7 +1,11 @@
 package by.karpov.rent_cars_final_project.pool;
 
 
+import by.karpov.rent_cars_final_project.command.impl.SignUpCommand;
 import by.karpov.rent_cars_final_project.exception.DaoException;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
@@ -13,6 +17,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class ConnectionPool {
+    private static final Logger LOGGER = LogManager.getLogger(SignUpCommand.class);
     private static final String URL = PropertiesUtil.getProperty("db.url");
     private static final String USER = PropertiesUtil.getProperty("db.username");
     private static final String PASS = PropertiesUtil.getProperty("db.password");
@@ -69,12 +74,12 @@ public class ConnectionPool {
         }
     }
 
-    public  boolean closePool() throws DaoException {
+    public  boolean closePool()  {
         for (Connection connection : sourceConnection) {
             try {
                 connection.close();
-            } catch (SQLException ex) {
-                throw new DaoException(ex);
+            } catch (SQLException e) {
+                LOGGER.warn("connection is not close", e);
             }
         }
         return true;
