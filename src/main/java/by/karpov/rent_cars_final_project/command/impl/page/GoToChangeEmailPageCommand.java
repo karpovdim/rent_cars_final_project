@@ -17,12 +17,11 @@ import static by.karpov.rent_cars_final_project.command.SessionAttribute.USER;
 public class GoToChangeEmailPageCommand implements Command {
 	private static final Logger LOGGER = LogManager.getLogger(GoToChangeEmailPageCommand.class);
 
-
 	@Override
 	public Router execute(HttpServletRequest request) {
 		LOGGER.info("method execute()");
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute(USER);
+		final var session = request.getSession();
+		final var user = (User) session.getAttribute(USER);
 		if (user == null ) {
 			return new Router(PagePath.ERROR_403_PAGE);
 		}

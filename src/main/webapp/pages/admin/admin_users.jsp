@@ -103,7 +103,8 @@
 							<input type="text" class="form-control" name="id"
 								placeholder="<fmt:message
 								key="page.admin_users.id" />"
-								required pattern="^\d+$">
+<%--								required pattern="^\d+$"--%>
+							>
 						</div>
 					</div>
 					<div class="row mb-3">

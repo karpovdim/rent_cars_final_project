@@ -9,7 +9,6 @@ public class NotFoundException extends Exception {
     } public NotFoundException(long id ,String msg) {
         this.id = id;
     }
-
     public long getId() {
         return this.id;
     }

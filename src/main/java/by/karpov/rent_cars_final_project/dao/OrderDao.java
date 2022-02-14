@@ -21,5 +21,4 @@ public interface OrderDao {
 
     List<Order> findByUserIdAndLimit(Long userId, int leftBorderCars, int limitOrdersOnPage) throws DaoException;
 
-    List<Long> findCarsIdByUserId(long userId) throws DaoException;
 }

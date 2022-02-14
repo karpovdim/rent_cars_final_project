@@ -26,14 +26,14 @@ public class SignInCommand implements Command {
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");
         Router router;
-        HttpSession session = request.getSession();
+        final var session = request.getSession();
         session.setAttribute(PREVIOUS_PAGE, PagePath.SIGN_IN_PAGE_REDIRECT);
-        String email = request.getParameter(RequestParameter.USER_EMAIL);
-        String password = request.getParameter(RequestParameter.USER_PASSWORD);
+        final var email = request.getParameter(RequestParameter.USER_EMAIL);
+        final var password = request.getParameter(RequestParameter.USER_PASSWORD);
         try {
-            Optional<User> userOptional = service.findByEmailAndPassword(email, password);
+            final var userOptional = service.findByEmailAndPassword(email, password);
             if (userOptional.isPresent()) {
-                User user = userOptional.get();
+                final var user = userOptional.get();
                 if (ACTIVE == user.getUserStatus()) {
                     session.setAttribute(USER, user);
                     session.setAttribute(IS_AUTHENTICATED, true);

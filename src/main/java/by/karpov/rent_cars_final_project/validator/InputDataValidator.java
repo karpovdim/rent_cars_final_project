@@ -40,7 +40,7 @@ public class InputDataValidator {
     }
 
     public boolean isIdValid(long id) {
-        return id > 0;
+        return id > 0 && id < 1000000;
     }
 
     public boolean isEmailValid(String email) {
@@ -72,7 +72,7 @@ public class InputDataValidator {
         return ADMIN.equals(user.getRole());
     }
 
-    public boolean isCanBeDelete(User user, Long id) {
+    public boolean isCanBeChange(User user, Long id) {
         return !user.getId().equals(id);
     }
 

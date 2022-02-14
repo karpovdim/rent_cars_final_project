@@ -31,7 +31,13 @@ public class ChangeUserStatusCommand implements Command {
         final var userStatus = request.getParameter(RequestParameter.USER_STATUS);
         if (userId != null && !userId.isBlank() && validator.isStatusUserPresent(userStatus)) {
             try {
-                final var optionalUser = userService.updateStatus(Long.parseLong(userId), User.UserStatus.valueOf(userStatus));
+                final var id = Long.parseLong(userId);
+                if(user.getId().equals(id)){
+                    LOGGER.info("method change status user");
+                    request.setAttribute(RequestParameter.CHANGE_STATUS_INCORRECT, true);
+                    return new Router(PagePath.ADMIN_USERS_PAGE);
+                }
+                final var optionalUser = userService.updateStatus(id, User.UserStatus.valueOf(userStatus));
                 if (optionalUser.isPresent()) {
                     router = new Router(PagePath.ADMIN_USERS_REDIRECT);
                     router.setRedirect();

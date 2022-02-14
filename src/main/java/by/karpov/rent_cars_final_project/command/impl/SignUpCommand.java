@@ -31,7 +31,7 @@ public class SignUpCommand implements Command {
         LOGGER.info("method execute()");
         Map<String, String> parameters = new HashMap<>();
         Router router;
-        String dateOfBirth = request.getParameter(USER_DATE_OF_BIRTH);
+        final var dateOfBirth = request.getParameter(USER_DATE_OF_BIRTH);
         if (dateOfBirth != null && !dateOfBirth.isBlank()) {
             parameters.put(USER_EMAIL, request.getParameter(USER_EMAIL));
             parameters.put(USER_PASSWORD, request.getParameter(USER_PASSWORD));
@@ -40,7 +40,7 @@ public class SignUpCommand implements Command {
             parameters.put(USER_PHONE_NUMBER, request.getParameter(USER_PHONE_NUMBER));
             parameters.put(USER_PASSWORD_FOR_AUTHENTICATION, hashPassword);
             try {
-                Optional<User> user = userServiceImpl.findByEmail(parameters.get(USER_EMAIL));
+                final var user = userServiceImpl.findByEmail(parameters.get(USER_EMAIL));
                 if (user.isEmpty()) {
                     if (userServiceImpl.registerUser(parameters)) {
                         emailSender.sendMail(parameters.get(USER_EMAIL), hashPassword);

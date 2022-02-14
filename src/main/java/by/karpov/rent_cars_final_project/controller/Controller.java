@@ -36,9 +36,9 @@ public class Controller extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         LOGGER.info( "method processRequest()");
-        String commandName = request.getParameter(COMMAND);
-        Command command = provider.getCommand(commandName);
-        Router router = command.execute(request);
+        final var commandName = request.getParameter(COMMAND);
+        final var command = provider.getCommand(commandName);
+        final var router = command.execute(request);
         switch (router.getType()) {
             case REDIRECT -> response.sendRedirect(router.getPagePath());
             case FORWARD -> request.getRequestDispatcher(router.getPagePath()).forward(request, response);

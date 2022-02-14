@@ -26,13 +26,13 @@
                   method="post">
                 <input type="hidden" name="command" value="sign_in_page">
                 <div class="mb-2">
-                    <label for="inputEmail1" class="form-label">input email</label>
+                    <label for="inputEmail1" class="form-label"><fmt:message key="input_email"/></label>
                     <input id="inputEmail1" type="email"
                            class="form-control" name="email" required
                            pattern="^[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}"/>
                 </div>
                 <div class="mb-4">
-                    <label for="inputPassword1" class="form-label">input password</label>
+                    <label for="inputPassword1" class="form-label"><fmt:message key="input_password"/></label>
                     <input id="inputPassword1" type="password"
                            class="form-control" name="password" required
                            pattern="^[^<>]{5,64}$"/>

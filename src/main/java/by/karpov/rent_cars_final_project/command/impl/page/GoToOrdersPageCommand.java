@@ -32,25 +32,24 @@ public class GoToOrdersPageCommand implements Command {
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");
         Router router;
-        HttpSession session = request.getSession();
+        final var session = request.getSession();
         session.setAttribute(PREVIOUS_PAGE, PagePath.ORDERS_PAGE_REDIRECT);
-
-        String page = request.getParameter(RequestParameter.CURRENT_PAGE_NUMBER);
+        final var page = request.getParameter(RequestParameter.CURRENT_PAGE_NUMBER);
         int currentPageNumber;
         if (page != null) {
             currentPageNumber = Integer.parseInt(page);
         } else {
             currentPageNumber = 1;
         }
-        int leftBorderCars = (LIMIT_ORDERS_ON_PAGE * (currentPageNumber - 1));
-        User user = (User) session.getAttribute(USER);
+        final var leftBorderCars = (LIMIT_ORDERS_ON_PAGE * (currentPageNumber - 1));
+        final var user = (User) session.getAttribute(USER);
         if (user == null ) {
             return new Router(PagePath.ERROR_403_PAGE);
         }
         try {
-            double numberOfOrders = orderService.countOrders(user.getId());
-            double maxNumberOfPages = Math.ceil(numberOfOrders / LIMIT_ORDERS_ON_PAGE);
-            List<Order> orders = orderService.findByUserIdAndLimit(user.getId(), leftBorderCars, LIMIT_ORDERS_ON_PAGE);
+            final var numberOfOrders = orderService.countOrders(user.getId());
+            final var maxNumberOfPages = Math.ceil(numberOfOrders / LIMIT_ORDERS_ON_PAGE);
+            final var orders = orderService.findByUserIdAndLimit(user.getId(), leftBorderCars, LIMIT_ORDERS_ON_PAGE);
             session.setAttribute(CURRENT_PAGE_NUMBER, currentPageNumber);
             session.setAttribute(MAX_NUMBER_OF_PAGES, maxNumberOfPages);
             session.setAttribute(RequestParameter.LIST_ORDERS, orders);
@@ -62,5 +61,4 @@ public class GoToOrdersPageCommand implements Command {
         }
         return router;
     }
-
 }

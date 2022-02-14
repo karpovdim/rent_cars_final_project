@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 public class GoToCodeEntryPageCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(GoToCodeEntryPageCommand.class);
 
-
     @Override
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");

@@ -25,22 +25,22 @@ public class GoToAdminOrdersPageCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(USER);
+        final var session = request.getSession();
+        final var user = (User) session.getAttribute(USER);
         final var validator = InputDataValidator.getInstance();
         if (user == null || !validator.isAdmin(user)) {
             return new Router(PagePath.ERROR_403_PAGE);
         }
         Router router;
         session.setAttribute(PREVIOUS_PAGE, PagePath.ADMIN_ORDERS_REDIRECT);
-        String page = request.getParameter(RequestParameter.CURRENT_PAGE_NUMBER);
+        final var page = request.getParameter(RequestParameter.CURRENT_PAGE_NUMBER);
         int currentPageNumber;
         if (page != null) {
             currentPageNumber = Integer.parseInt(page);
         } else {
             currentPageNumber = 1;
         }
-        OrderServiceImpl orderService = OrderServiceImpl.getInstance();
+        final var orderService = OrderServiceImpl.getInstance();
         try {
             double numberOfOrders = orderService.countOrders();
             double maxNumberOfPages = Math.ceil(numberOfOrders / LIMIT_ORDERS_ON_PAGE);

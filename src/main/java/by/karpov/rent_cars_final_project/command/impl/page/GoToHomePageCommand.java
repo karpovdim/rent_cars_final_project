@@ -25,15 +25,15 @@ public class GoToHomePageCommand implements Command {
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");
         Router router;
-        HttpSession session = request.getSession();
+        final var session = request.getSession();
         session.setAttribute(PREVIOUS_PAGE, PagePath.HOME_PAGE_REDIRECT);
-        String page = request.getParameter(RequestParameter.CURRENT_PAGE_NUMBER);
-        int currentPageNumber = page != null ? Integer.parseInt(page) : 1;
-        int leftBorderCars = (LIMIT_CARS_ON_PAGE * (currentPageNumber - 1));
+        final var page = request.getParameter(RequestParameter.CURRENT_PAGE_NUMBER);
+        final var currentPageNumber = page != null ? Integer.parseInt(page) : 1;
+        final var leftBorderCars = (LIMIT_CARS_ON_PAGE * (currentPageNumber - 1));
         try {
-            double numberOfCars = carServiceImpl.countCars();
-            double maxNumberOfPages = Math.ceil(numberOfCars / LIMIT_CARS_ON_PAGE);
-            List<Car> cars = carServiceImpl.findByLimit(leftBorderCars, LIMIT_CARS_ON_PAGE);
+            final var numberOfCars = carServiceImpl.countCars();
+            final var maxNumberOfPages = Math.ceil(numberOfCars / LIMIT_CARS_ON_PAGE);
+            final var cars = carServiceImpl.findByLimit(leftBorderCars, LIMIT_CARS_ON_PAGE);
             session.setAttribute(CURRENT_PAGE_NUMBER, currentPageNumber);
             session.setAttribute(MAX_NUMBER_OF_PAGES, maxNumberOfPages);
             session.setAttribute(RequestParameter.LIST_CARS, cars);

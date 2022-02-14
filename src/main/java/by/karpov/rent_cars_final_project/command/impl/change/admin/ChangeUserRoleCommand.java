@@ -17,7 +17,6 @@ import org.apache.logging.log4j.Logger;
 public class ChangeUserRoleCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(ChangeUserRoleCommand.class);
 
-
     @Override
     public Router execute(HttpServletRequest request) {
         final var validator = InputDataValidator.getInstance();
@@ -32,7 +31,13 @@ public class ChangeUserRoleCommand implements Command {
         final var userRole = request.getParameter(RequestParameter.USER_ROLE);
         if (userId != null && !userId.isBlank() && validator.isRolePresent(userRole)) {
             try {
-                final var optionalUser = userService.updateRole(Long.parseLong(userId), User.UserRole.valueOf(userRole));
+                final var id = Long.parseLong(userId);
+                if(user.getId().equals(id)){
+                        LOGGER.info("method change role  user");
+                        request.setAttribute(RequestParameter.CHANGE_ROLE_INCORRECT, true);
+                        return new Router(PagePath.ADMIN_USERS_PAGE);
+                    }
+                final var optionalUser = userService.updateRole(id, User.UserRole.valueOf(userRole));
                 if (optionalUser.isPresent()) {
                     router = new Router(PagePath.ADMIN_USERS_REDIRECT);
                     router.setRedirect();

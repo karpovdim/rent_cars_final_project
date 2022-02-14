@@ -23,10 +23,10 @@ public class CodeEntryCommand implements Command {
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");
         Router router;
-        UserService userServiceImpl = UserServiceImpl.getInstance();
-        String enteredCode = request.getParameter(RequestParameter.CODE);
+        final var userServiceImpl = UserServiceImpl.getInstance();
+        final var enteredCode = request.getParameter(RequestParameter.CODE);
         try {
-            Optional<User> userOptional = userServiceImpl.findByPasswordForAuthentication(enteredCode);
+            final var userOptional = userServiceImpl.findByPasswordForAuthentication(enteredCode);
             if (userOptional.isPresent()) {
                 final var user = userOptional.get();
                 user.setUserStatus(ACTIVE);

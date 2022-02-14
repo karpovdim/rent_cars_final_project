@@ -24,21 +24,21 @@ public class GoToAdminCarsPageCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(USER);
+        final var session = request.getSession();
+        final var user = (User) session.getAttribute(USER);
         if (user == null || user.getRole() != User.UserRole.ADMIN) {
             return new Router(PagePath.ERROR_403_PAGE);
         }
         Router router;
         session.setAttribute(PREVIOUS_PAGE, PagePath.ADMIN_CARS_REDIRECT);
-        String page = request.getParameter(RequestParameter.CURRENT_PAGE_NUMBER);
+        final var page = request.getParameter(RequestParameter.CURRENT_PAGE_NUMBER);
         int currentPageNumber;
         if (page != null) {
             currentPageNumber = Integer.parseInt(page);
         } else {
             currentPageNumber = 1;
         }
-        CarServiceImpl carServiceImpl = CarServiceImpl.getInstance();
+        final var carServiceImpl = CarServiceImpl.getInstance();
         try {
             double numberOfCars = carServiceImpl.countCars();
             double maxNumberOfPages = Math.ceil(numberOfCars / LIMIT_ORDERS_ON_PAGE);

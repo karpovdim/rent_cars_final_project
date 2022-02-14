@@ -31,7 +31,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean registration(User user, String password, String passwordForAuthentication) throws DaoException { // TODO REGISTRATION CHANGE TO CREATE
+    public boolean registration(User user, String password, String passwordForAuthentication) throws DaoException {
         try (final var connection = pool().getConnection();
              final var statement = connection.prepareStatement(INSERT_USER, RETURN_GENERATED_KEYS)
         ) {

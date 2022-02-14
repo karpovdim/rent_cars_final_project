@@ -35,23 +35,23 @@ public class MakeOrderCommand implements Command {
         LOGGER.info("method execute()");
         Map<String, String> parameters = new HashMap<>();
         Router router;
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(USER);
-        if (user == null ) {
+        final var session = request.getSession();
+        final var user = (User) session.getAttribute(USER);
+        if (user == null) {
             return new Router(PagePath.ERROR_403_PAGE);
         }
-        Car car = (Car) session.getAttribute(SessionAttribute.CAR);
+        final var car = (Car) session.getAttribute(SessionAttribute.CAR);
 
-        String rentDateParameters = request.getParameter(RENT_DATE);
-        String returnDateParameters = request.getParameter(RETURN_DATE);
+        final var rentDateParameters = request.getParameter(RENT_DATE);
+        final var returnDateParameters = request.getParameter(RETURN_DATE);
         if (rentDateParameters == null || rentDateParameters.isBlank() || returnDateParameters == null
                 || returnDateParameters.isBlank()) { // todo validation in method
             LOGGER.info("user entered wrong dates");
             request.setAttribute(ORDER_INCORRECT_DATE, true);
             return new Router(PagePath.MAKE_ORDER_PAGE);
         }
-        LocalDate rentDate = LocalDate.parse(rentDateParameters);
-        LocalDate returnDate = LocalDate.parse(returnDateParameters);
+        final var rentDate = LocalDate.parse(rentDateParameters);
+        final var returnDate = LocalDate.parse(returnDateParameters);
         if (rentDate.isAfter(returnDate) || rentDate.isBefore(LocalDate.now())) { // todo check in validator
             LOGGER.info("user entered the pick up date of the lease after the return date of the lease");
             request.setAttribute(ORDER_PICK_UP_BEFORE_RETURN, true);
@@ -65,7 +65,7 @@ public class MakeOrderCommand implements Command {
         OrderService orderService = OrderServiceImpl.getInstance();
         CarService carService = CarServiceImpl.getInstance();
         try {
-            Optional<Car> optionalCar = carService.findById(car.getId());
+            final var optionalCar = carService.findById(car.getId());
             long orderId;
             if (optionalCar.isPresent() && optionalCar.get().getCarStatus() == Car.CarStatus.FREE) {
                 orderId = orderService.add(parameters);
@@ -73,7 +73,7 @@ public class MakeOrderCommand implements Command {
                 router = new Router(PagePath.PAYMENT_PAGE_REDIRECT);
                 router.setRedirect();
             } else if (optionalCar.isPresent() && optionalCar.get().getCarStatus() == Car.CarStatus.BOOKED) {
-                List<Order> listOrders = orderService.findByCarId(car.getId());
+                final var listOrders = orderService.findByCarId(car.getId());
                 if (!isCarFreeOnThisDate(rentDate, returnDate, listOrders)) {
                     LOGGER.info("car booked on this date");
                     request.setAttribute(CAR_BOOKED, true);
@@ -102,7 +102,7 @@ public class MakeOrderCommand implements Command {
             if (returnDate.isBefore(order.getRentDate()) || rentDate.isAfter(order.getReturnDate())) {
                 countTrueOptions++;
             }
-        }
+        } // TODO MOVE TO VALIDATOR
         return countTrueOptions == listOrders.size();
     }
 }

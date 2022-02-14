@@ -46,7 +46,7 @@ public class ConnectionPool {
             } catch (DaoException e) {
                 e.printStackTrace();
             }
-            Connection proxyConnection = (Connection) Proxy.newProxyInstance(ConnectionPool.class.getClassLoader(), new Class[]{Connection.class},
+            final var proxyConnection = (Connection) Proxy.newProxyInstance(ConnectionPool.class.getClassLoader(), new Class[]{Connection.class},
                     (proxy, method, args) -> method.getName().equals("close")
                             ? pool.add((Connection) proxy)
                             : method.invoke(connection, args));
@@ -67,7 +67,7 @@ public class ConnectionPool {
 
     public  Connection getConnection() {
         try {
-            Connection connection = pool.take();
+            final var connection = pool.take();
             return connection;
         } catch (InterruptedException ex) {
             throw new RuntimeException(ex);

@@ -18,8 +18,8 @@ public class GoToAdminAddCarPageCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(USER);
+        final var session = request.getSession();
+        final var user = (User) session.getAttribute(USER);
         if (user == null || user.getRole() != User.UserRole.ADMIN) {
             return new Router(PagePath.ERROR_403_PAGE);
         }

@@ -27,8 +27,8 @@ public class InitializeDefaultValuesFilter implements Filter {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		HttpSession session = httpRequest.getSession();
+		final var httpRequest = (HttpServletRequest) request;
+		final var session = httpRequest.getSession();
 		if (session.getAttribute(LOCALE) == null) {
 			session.setAttribute(LOCALE, ENGLISH);
 		}

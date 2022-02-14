@@ -153,25 +153,6 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Long> findCarsIdByUserId(long userId) throws DaoException {
-        LOGGER.info( "method findByUserId()");
-        List<Long> listCarsId = new ArrayList<>();
-        try (Connection connection = pool().getConnection();
-             PreparedStatement statement = connection.prepareStatement(SQL_FIND_CAR_ID_BY_USER_ID)) {
-            statement.setLong(1, userId);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    listCarsId.add(resultSet.getLong(ID_CAR));
-                }
-            }
-        } catch (SQLException e) {
-            LOGGER.error("exception in method findCarsIdByUserId()", e);
-            throw new DaoException("Exception when find cars id by user id", e);
-        }
-        return listCarsId;
-    }
-
-    @Override
     public Order update(Order order) throws DaoException {
         try (final var connection = pool().getConnection();
              final var statement = connection.prepareStatement(UPDATE_ORDER)) {
@@ -186,7 +167,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     private Order buildOrder(ResultSet resultSet) throws SQLException{
-        CarService carService = CarServiceImpl.getInstance();
+        final var carService = CarServiceImpl.getInstance();
         return Order.builder()
                 .id(resultSet.getLong(COLUMN_ID))
                 .price(resultSet.getBigDecimal(COLUMN_PRICE_ORDER))

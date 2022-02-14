@@ -18,8 +18,8 @@ public class GoToPersonalProfilePageCommand implements Command {
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");
         Router router;
-        var session = request.getSession();
-        User user = (User) session.getAttribute(USER);
+        final var session = request.getSession();
+        final var user = (User) session.getAttribute(USER);
         if (user == null ) {
             return new Router(PagePath.ERROR_403_PAGE);
         }

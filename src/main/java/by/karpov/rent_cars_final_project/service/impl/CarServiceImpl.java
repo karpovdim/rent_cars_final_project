@@ -63,7 +63,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public Car create(Car car) throws ServiceException {
         LOGGER.info("method create() Car");
-        Car createCar = null;
+        Car createCar ;
         try {
             createCar = carDaoImpl.create(car);
         } catch (DaoException e) {

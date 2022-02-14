@@ -8,7 +8,7 @@ public final class PropertiesUtil {
     private static final Properties PROPERTIES = new Properties();
     public static final String PATH_PROPERTIES = "application.properties";
     static {
-        try (InputStream inputStream = PropertiesUtil.class
+        try (final var inputStream = PropertiesUtil.class
                 .getClassLoader()
                 .getResourceAsStream(PATH_PROPERTIES)) {
             PROPERTIES.load(inputStream);
@@ -18,7 +18,7 @@ public final class PropertiesUtil {
     }
 
     public static String getProperty(String key) {
-        String property = PROPERTIES.getProperty(key);
+        final var property = PROPERTIES.getProperty(key);
         return property;
     }
 }

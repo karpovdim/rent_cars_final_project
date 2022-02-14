@@ -30,7 +30,7 @@ public class DeleteUserCommand implements Command {
         }
         try {
             long userId = Long.parseLong(request.getParameter(RequestParameter.USER_ID));
-            if (validator.isIdValid(userId) && !validator.isCanBeDelete(user, userId)) {
+            if (validator.isIdValid(userId) && !validator.isCanBeChange(user, userId)) {
                 LOGGER.info("method delete user");
                 request.setAttribute(RequestParameter.DELETE_USER_INCORRECT, true);
                 return new Router(PagePath.ADMIN_USERS_PAGE);

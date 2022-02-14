@@ -15,7 +15,7 @@ public class GoToSignUpPageCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");
-        HttpSession session = request.getSession();
+        final var session = request.getSession();
         session.setAttribute(SessionAttribute.PREVIOUS_PAGE, PagePath.SIGN_UP_PAGE_REDIRECT);
         return new Router(PagePath.SIGN_UP_PAGE);
     }

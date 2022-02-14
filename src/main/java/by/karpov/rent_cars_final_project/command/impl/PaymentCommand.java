@@ -33,19 +33,19 @@ public class PaymentCommand implements Command {
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");
         Router router;
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(USER);
+        final var session = request.getSession();
+        final var user = (User) session.getAttribute(USER);
         if (user == null ) {
             return new Router(PagePath.ERROR_403_PAGE);
         }
-        String cardNumber = request.getParameter(CARD_NUMBER);
-        String cvv = request.getParameter(CVV);
-        long orderId = (long) session.getAttribute(SessionAttribute.ORDER_ID);
-        Car car = (Car) session.getAttribute(SessionAttribute.CAR);
-        OrderServiceImpl orderService = OrderServiceImpl.getInstance();
-        OrderPaymentService paymentService = OrderPaymentServiceImpl.getInstance();
+        final var cardNumber = request.getParameter(CARD_NUMBER);
+        final var cvv = request.getParameter(CVV);
+        final var orderId = (long) session.getAttribute(SessionAttribute.ORDER_ID);
+        final var car = (Car) session.getAttribute(SessionAttribute.CAR);
+        final var orderService = OrderServiceImpl.getInstance();
+        final var paymentService = OrderPaymentServiceImpl.getInstance();
         try {
-            Optional<Order> order = orderService.findById(orderId);
+            final var order = orderService.findById(orderId);
             if (order.isEmpty()) {
                 LOGGER.error("order is not found");
                 return new Router(PagePath.ERROR_500_PAGE);
