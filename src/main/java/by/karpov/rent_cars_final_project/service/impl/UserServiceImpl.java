@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updatePasswordForAuthentication(long userId, String code) throws ServiceException {
-        if (!validator.isCodeValid(code) && !validator.isIdValid(userId)) {
+        if (!validator.isIdValid(userId)) {
             return false;
         }
         try {

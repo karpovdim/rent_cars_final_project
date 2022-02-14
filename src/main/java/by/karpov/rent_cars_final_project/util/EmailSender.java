@@ -20,7 +20,7 @@ public class EmailSender {
     private static final String MAIL_PROPERTIES_PATH = "properties/mail.properties";
     private static final String USER_KEY = "mail.user.user";
     private static final String PASSWORD_KEY = "mail.user.password";
-    private static final String TITLE_MAIL = "Registration message from Car4U";
+    private static final String TITLE_MAIL = "Registration message from R...car";
     private static final String MESSAGE_TO_CODE = "Your registration confirmation code: ";
     private static final String MESSAGE_TO_LINK = "Please, follow the link and enter a code: ";
     private static final String REGISTRATION_CONFIRMATION_LINK = "http://localhost:8080/rentalcar/controller?command=to_code_entry_page_command";
