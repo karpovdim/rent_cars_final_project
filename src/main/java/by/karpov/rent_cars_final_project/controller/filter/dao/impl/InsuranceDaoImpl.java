@@ -1,6 +1,6 @@
-package by.karpov.rent_cars_final_project.dao.impl;
+package by.karpov.rent_cars_final_project.controller.filter.dao.impl;
 
-import by.karpov.rent_cars_final_project.dao.InsuranceDao;
+import by.karpov.rent_cars_final_project.controller.filter.dao.InsuranceDao;
 import by.karpov.rent_cars_final_project.entity.Car;
 import by.karpov.rent_cars_final_project.entity.Insurance;
 import by.karpov.rent_cars_final_project.exception.DaoException;
@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static by.karpov.rent_cars_final_project.dao.impl.QueryDao.*;
 import static by.karpov.rent_cars_final_project.pool.ConnectionPool.pool;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
@@ -33,7 +32,7 @@ public class InsuranceDaoImpl implements InsuranceDao {
     @Override
     public Optional<Insurance> findById(Long id) throws DaoException {
         try (final var connection = pool().getConnection();
-             final var statement = connection.prepareStatement(FIND_BY_ID_INSURANCE)) {
+             final var statement = connection.prepareStatement(QueryDao.FIND_BY_ID_INSURANCE)) {
             statement.setLong(1, id);
             try (final var resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -52,7 +51,7 @@ public class InsuranceDaoImpl implements InsuranceDao {
     public List<Insurance> findAll() throws DaoException {
         final var insurances = new ArrayList<Insurance>();
         try (final var connection = pool().getConnection();
-             final var statement = connection.prepareStatement(FIND_ALL_INSURANCE)) {
+             final var statement = connection.prepareStatement(QueryDao.FIND_ALL_INSURANCE)) {
             try (final var resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     insurances.add(buildInsurance(resultSet));
@@ -68,11 +67,11 @@ public class InsuranceDaoImpl implements InsuranceDao {
     @Override
     public Insurance create(Insurance insurance) throws DaoException {
         try (final var connection = pool().getConnection();
-             final var statement = connection.prepareStatement(INSERT_INSURANCE, RETURN_GENERATED_KEYS);
+             final var statement = connection.prepareStatement(QueryDao.INSERT_INSURANCE, RETURN_GENERATED_KEYS);
              final var resultSet = statement.getGeneratedKeys()
         ) {
             if (resultSet.next()) {
-                final var id = resultSet.getLong(COLUMN_ID);
+                final var id = resultSet.getLong(QueryDao.COLUMN_ID);
                 insurance.setId(id);
             }
             statementInsuranceSetParameters(insurance, statement);
@@ -87,7 +86,7 @@ public class InsuranceDaoImpl implements InsuranceDao {
     @Override
     public void delete(Insurance insurance) throws DaoException {
         try (final var connection = pool().getConnection();
-             final var statement = connection.prepareStatement(DELETE_INSURANCE)) {
+             final var statement = connection.prepareStatement(QueryDao.DELETE_INSURANCE)) {
             statement.setLong(1, insurance.getId());
             final var count = statement.executeUpdate();
             if (count > 1) {
@@ -104,7 +103,7 @@ public class InsuranceDaoImpl implements InsuranceDao {
     @Override
     public Insurance update(Insurance insurance) throws DaoException {
         try (final var connection = pool().getConnection();
-             final var statement = connection.prepareStatement(UPDATE_INSURANCE)) {
+             final var statement = connection.prepareStatement(QueryDao.UPDATE_INSURANCE)) {
             statementInsuranceSetParameters(insurance, statement);
             statement.setLong(6, insurance.getId());
             statement.executeUpdate();
@@ -117,12 +116,12 @@ public class InsuranceDaoImpl implements InsuranceDao {
 
     private Insurance buildInsurance(ResultSet resultSet) throws SQLException {
         return Insurance.builder()
-                .id(resultSet.getLong(COLUMN_ID))
-                .startInsurance(resultSet.getObject(COLUMN_DATE_START, LocalDateTime.class))
-                .endInsurance(resultSet.getObject(COLUMN_DATE_END, LocalDateTime.class))
-                .isActive(resultSet.getBoolean(COLUMN_IS_ACTIVE))
-                .identificationNumber(resultSet.getLong(COLUMN_IDENTIFICATION_NUMBER))
-                .car(new Car(resultSet.getLong(COLUMN_CAR_ID)))// TODO FIND BY ID IN SERVICE
+                .id(resultSet.getLong(QueryDao.COLUMN_ID))
+                .startInsurance(resultSet.getObject(QueryDao.COLUMN_DATE_START, LocalDateTime.class))
+                .endInsurance(resultSet.getObject(QueryDao.COLUMN_DATE_END, LocalDateTime.class))
+                .isActive(resultSet.getBoolean(QueryDao.COLUMN_IS_ACTIVE))
+                .identificationNumber(resultSet.getLong(QueryDao.COLUMN_IDENTIFICATION_NUMBER))
+                .car(new Car(resultSet.getLong(QueryDao.COLUMN_CAR_ID)))
                 .build();
     }
 

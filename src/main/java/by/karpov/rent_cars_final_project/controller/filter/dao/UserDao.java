@@ -1,4 +1,4 @@
-package by.karpov.rent_cars_final_project.dao;
+package by.karpov.rent_cars_final_project.controller.filter.dao;
 
 import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.DaoException;

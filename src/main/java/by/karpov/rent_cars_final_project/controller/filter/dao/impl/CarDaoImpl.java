@@ -1,6 +1,6 @@
-package by.karpov.rent_cars_final_project.dao.impl;
+package by.karpov.rent_cars_final_project.controller.filter.dao.impl;
 
-import by.karpov.rent_cars_final_project.dao.CarDao;
+import by.karpov.rent_cars_final_project.controller.filter.dao.CarDao;
 import by.karpov.rent_cars_final_project.entity.Car;
 import by.karpov.rent_cars_final_project.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static by.karpov.rent_cars_final_project.dao.impl.QueryDao.*;
 import static by.karpov.rent_cars_final_project.pool.ConnectionPool.pool;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
@@ -31,7 +30,7 @@ public class CarDaoImpl implements CarDao {
     @Override
     public Optional<Car> findById(Long id) throws DaoException {
         try (final var connection = pool().getConnection();
-             final var statement = connection.prepareStatement(FIND_BY_ID_CAR)
+             final var statement = connection.prepareStatement(QueryDao.FIND_BY_ID_CAR)
         ) {
             statement.setLong(1, id);
             try (final var resultSet = statement.executeQuery()) {
@@ -51,7 +50,7 @@ public class CarDaoImpl implements CarDao {
     public List<Car> findAll() throws DaoException {
         final var cars = new ArrayList<Car>();
         try (final var connection = pool().getConnection();
-             final var statement = connection.prepareStatement(FIND_ALL_CAR);
+             final var statement = connection.prepareStatement(QueryDao.FIND_ALL_CAR);
              final var resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 cars.add(buildCar(resultSet));
@@ -66,7 +65,7 @@ public class CarDaoImpl implements CarDao {
     @Override
     public Car update(Car car) throws DaoException {
         try (final var connection = pool().getConnection();
-             final var statement = connection.prepareStatement(UPDATE_CAR)) {
+             final var statement = connection.prepareStatement(QueryDao.UPDATE_CAR)) {
             statementCarSetParameters(car, statement);
             statement.setLong(8, car.getId());
             statement.executeUpdate();
@@ -80,7 +79,7 @@ public class CarDaoImpl implements CarDao {
     @Override
     public Car create(Car car) throws DaoException {
         try (final var connection = pool().getConnection();
-             final var statement = connection.prepareStatement(INSERT_CAR, RETURN_GENERATED_KEYS);) {
+             final var statement = connection.prepareStatement(QueryDao.INSERT_CAR, RETURN_GENERATED_KEYS);) {
 
             statementCarSetParameters(car, statement);
             statement.executeUpdate();
@@ -100,7 +99,7 @@ public class CarDaoImpl implements CarDao {
     @Override
     public void delete(Car car) throws DaoException {
         try (final var connection = pool().getConnection();
-             final var statement = connection.prepareStatement(DELETE_CAR)) {
+             final var statement = connection.prepareStatement(QueryDao.DELETE_CAR)) {
             statement.setLong(1, car.getId());
             final int count = statement.executeUpdate();
             if (count > 1) {
@@ -116,7 +115,7 @@ public class CarDaoImpl implements CarDao {
     @Override
     public Optional<Car> findByRegistrationNumber(String regNumber) throws DaoException {
         try (final var connection = pool().getConnection();
-             final var statement = connection.prepareStatement(FIND_BY_REGISTRATION_NUMBER_CAR)
+             final var statement = connection.prepareStatement(QueryDao.FIND_BY_REGISTRATION_NUMBER_CAR)
         ) {
             statement.setString(1, regNumber);
             try (final var resultSet = statement.executeQuery()) {
@@ -136,7 +135,7 @@ public class CarDaoImpl implements CarDao {
     public List<Car> findByLimit(int leftBorderCars, int limitCarsOnPage) throws DaoException {
         final var cars = new ArrayList<Car>();
         try (final var connection = pool().getConnection();
-             final var statement = connection.prepareStatement(FIND_CARS_BY_LIMIT)) {
+             final var statement = connection.prepareStatement(QueryDao.FIND_CARS_BY_LIMIT)) {
             statement.setInt(1, leftBorderCars);
             statement.setInt(2, limitCarsOnPage);
             try (final var resultSet = statement.executeQuery()) {
@@ -156,14 +155,14 @@ public class CarDaoImpl implements CarDao {
 
     private Car buildCar(ResultSet resultSet) throws SQLException {
         return Car.builder()
-                .id(resultSet.getLong(COLUMN_ID))
-                .registrationNumber(resultSet.getString(REGISTRATION_NUMBER))
-                .cost(resultSet.getBigDecimal(COST_BY_CAR))
-                .imageUrl(resultSet.getString(IMAGE_URL))
-                .carStatus(Car.CarStatus.valueOf(resultSet.getString(CAR_STATUS)))
-                .transmissionType(Car.TransmissionType.valueOf(resultSet.getString(TRANSMISSION_TYPE)))
-                .conditioner(resultSet.getBoolean(CONDITIONER))
-                .descriptionCar(resultSet.getString(CAR_DESCRIPTION))
+                .id(resultSet.getLong(QueryDao.COLUMN_ID))
+                .registrationNumber(resultSet.getString(QueryDao.REGISTRATION_NUMBER))
+                .cost(resultSet.getBigDecimal(QueryDao.COST_BY_CAR))
+                .imageUrl(resultSet.getString(QueryDao.IMAGE_URL))
+                .carStatus(Car.CarStatus.valueOf(resultSet.getString(QueryDao.CAR_STATUS)))
+                .transmissionType(Car.TransmissionType.valueOf(resultSet.getString(QueryDao.TRANSMISSION_TYPE)))
+                .conditioner(resultSet.getBoolean(QueryDao.CONDITIONER))
+                .descriptionCar(resultSet.getString(QueryDao.CAR_DESCRIPTION))
                 .build();
     }
 

@@ -9,6 +9,9 @@ import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import static by.karpov.rent_cars_final_project.entity.User.UserRole.ADMIN;
 
 
@@ -141,5 +144,14 @@ public class InputDataValidator {
 
     public boolean isStatusOrderPresent(String orderStatus) {
         return EnumUtils.isValidEnum(Order.OrderStatus.class, orderStatus);
+    }
+    public boolean isCarFreeOnThisDate(LocalDate rentDate, LocalDate returnDate, List<Order> listOrders) {
+        int countTrueOptions = 0;
+        for (Order order : listOrders) {
+            if (returnDate.isBefore(order.getRentDate()) || rentDate.isAfter(order.getReturnDate())) {
+                countTrueOptions++;
+            }
+        }
+        return countTrueOptions == listOrders.size();
     }
 }

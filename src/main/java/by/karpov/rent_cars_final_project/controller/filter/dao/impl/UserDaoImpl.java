@@ -1,6 +1,6 @@
-package by.karpov.rent_cars_final_project.dao.impl;
+package by.karpov.rent_cars_final_project.controller.filter.dao.impl;
 
-import by.karpov.rent_cars_final_project.dao.UserDao;
+import by.karpov.rent_cars_final_project.controller.filter.dao.UserDao;
 import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.DaoException;
 import by.karpov.rent_cars_final_project.pool.ConnectionPool;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static by.karpov.rent_cars_final_project.dao.impl.QueryDao.*;
+import static by.karpov.rent_cars_final_project.controller.filter.dao.impl.QueryDao.*;
 import static by.karpov.rent_cars_final_project.pool.ConnectionPool.pool;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 

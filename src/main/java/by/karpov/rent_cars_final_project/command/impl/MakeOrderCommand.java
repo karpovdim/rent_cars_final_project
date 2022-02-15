@@ -12,6 +12,7 @@ import by.karpov.rent_cars_final_project.service.CarService;
 import by.karpov.rent_cars_final_project.service.OrderService;
 import by.karpov.rent_cars_final_project.service.impl.CarServiceImpl;
 import by.karpov.rent_cars_final_project.service.impl.OrderServiceImpl;
+import by.karpov.rent_cars_final_project.validator.InputDataValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.Level;
@@ -45,14 +46,14 @@ public class MakeOrderCommand implements Command {
         final var rentDateParameters = request.getParameter(RENT_DATE);
         final var returnDateParameters = request.getParameter(RETURN_DATE);
         if (rentDateParameters == null || rentDateParameters.isBlank() || returnDateParameters == null
-                || returnDateParameters.isBlank()) { // todo validation in method
+                || returnDateParameters.isBlank()) {
             LOGGER.info("user entered wrong dates");
             request.setAttribute(ORDER_INCORRECT_DATE, true);
             return new Router(PagePath.MAKE_ORDER_PAGE);
         }
         final var rentDate = LocalDate.parse(rentDateParameters);
         final var returnDate = LocalDate.parse(returnDateParameters);
-        if (rentDate.isAfter(returnDate) || rentDate.isBefore(LocalDate.now())) { // todo check in validator
+        if (rentDate.isAfter(returnDate) || rentDate.isBefore(LocalDate.now())) {
             LOGGER.info("user entered the pick up date of the lease after the return date of the lease");
             request.setAttribute(ORDER_PICK_UP_BEFORE_RETURN, true);
             return new Router(PagePath.MAKE_ORDER_PAGE);
@@ -74,7 +75,8 @@ public class MakeOrderCommand implements Command {
                 router.setRedirect();
             } else if (optionalCar.isPresent() && optionalCar.get().getCarStatus() == Car.CarStatus.BOOKED) {
                 final var listOrders = orderService.findByCarId(car.getId());
-                if (!isCarFreeOnThisDate(rentDate, returnDate, listOrders)) {
+                final var validator = InputDataValidator.getInstance();
+                if (!validator.isCarFreeOnThisDate(rentDate, returnDate, listOrders)) {
                     LOGGER.info("car booked on this date");
                     request.setAttribute(CAR_BOOKED, true);
                     return new Router(PagePath.MAKE_ORDER_PAGE);
@@ -96,13 +98,5 @@ public class MakeOrderCommand implements Command {
         return router;
     }
 
-    private boolean isCarFreeOnThisDate(LocalDate rentDate, LocalDate returnDate, List<Order> listOrders) {
-        int countTrueOptions = 0;
-        for (Order order : listOrders) {
-            if (returnDate.isBefore(order.getRentDate()) || rentDate.isAfter(order.getReturnDate())) {
-                countTrueOptions++;
-            }
-        } // TODO MOVE TO VALIDATOR
-        return countTrueOptions == listOrders.size();
-    }
+
 }

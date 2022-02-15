@@ -1,8 +1,8 @@
 package by.karpov.rent_cars_final_project.service.impl;
 
 import by.karpov.rent_cars_final_project.command.RequestParameter;
-import by.karpov.rent_cars_final_project.dao.UserDao;
-import by.karpov.rent_cars_final_project.dao.impl.UserDaoImpl;
+import by.karpov.rent_cars_final_project.controller.filter.dao.UserDao;
+import by.karpov.rent_cars_final_project.controller.filter.dao.impl.UserDaoImpl;
 import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.DaoException;
 import by.karpov.rent_cars_final_project.exception.ServiceException;

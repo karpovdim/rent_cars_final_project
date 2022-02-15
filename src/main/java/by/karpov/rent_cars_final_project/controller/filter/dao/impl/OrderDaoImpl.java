@@ -1,19 +1,14 @@
-package by.karpov.rent_cars_final_project.dao.impl;
+package by.karpov.rent_cars_final_project.controller.filter.dao.impl;
 
-import by.karpov.rent_cars_final_project.dao.CarDao;
-import by.karpov.rent_cars_final_project.dao.OrderDao;
+import by.karpov.rent_cars_final_project.controller.filter.dao.OrderDao;
 import by.karpov.rent_cars_final_project.entity.Car;
 import by.karpov.rent_cars_final_project.entity.Order;
 import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.DaoException;
-import by.karpov.rent_cars_final_project.exception.ServiceException;
-import by.karpov.rent_cars_final_project.service.CarService;
 import by.karpov.rent_cars_final_project.service.impl.CarServiceImpl;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,8 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static by.karpov.rent_cars_final_project.command.RequestParameter.CAR_ID;
-import static by.karpov.rent_cars_final_project.dao.impl.QueryDao.*;
+import static by.karpov.rent_cars_final_project.controller.filter.dao.impl.QueryDao.*;
 import static by.karpov.rent_cars_final_project.pool.ConnectionPool.pool;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
@@ -174,7 +168,7 @@ public class OrderDaoImpl implements OrderDao {
                 .rentDate(resultSet.getObject(COLUMN_RENT_DATE_ORDER, LocalDate.class))
                 .returnDate(resultSet.getObject(COLUMN_RETURN_DATE_ORDER, LocalDate.class))
                 .car(new Car(resultSet.getLong(COLUMN_ORDER_CAR_ID)))
-                .user(new User(resultSet.getLong(COLUMN_ORDER_USER_ID)))//TODO FIND BY ID IN SERVICE
+                .user(new User(resultSet.getLong(COLUMN_ORDER_USER_ID)))
                 .status(Order.OrderStatus.valueOf(resultSet.getString(COLUMN_ORDER_STATUS_ID)))
                 .build();
     }

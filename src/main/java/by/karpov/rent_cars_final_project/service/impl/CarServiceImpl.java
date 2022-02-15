@@ -1,10 +1,9 @@
 package by.karpov.rent_cars_final_project.service.impl;
 
-import by.karpov.rent_cars_final_project.dao.CarDao;
-import by.karpov.rent_cars_final_project.dao.impl.CarDaoImpl;
+import by.karpov.rent_cars_final_project.controller.filter.dao.CarDao;
+import by.karpov.rent_cars_final_project.controller.filter.dao.impl.CarDaoImpl;
 import by.karpov.rent_cars_final_project.entity.Car;
 import by.karpov.rent_cars_final_project.exception.DaoException;
-import by.karpov.rent_cars_final_project.exception.NotFoundException;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
 import by.karpov.rent_cars_final_project.service.CarService;
 import by.karpov.rent_cars_final_project.validator.InputDataValidator;
@@ -12,11 +11,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
 import static by.karpov.rent_cars_final_project.command.RequestParameter.*;
@@ -63,7 +60,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public Car create(Car car) throws ServiceException {
         LOGGER.info("method create() Car");
-        Car createCar ;
+        Car createCar;
         try {
             createCar = carDaoImpl.create(car);
         } catch (DaoException e) {
@@ -157,7 +154,13 @@ public class CarServiceImpl implements CarService {
                 .registrationNumber(parameters.get(CAR_REGISTRATION_NUMBER))
                 .cost(BigDecimal.valueOf(Long.parseLong(parameters.get(CAR_COST))))
                 .build();
-    return true;
+        try {
+            carDaoImpl.create(car);
+        } catch (DaoException e) {
+            LOGGER.error("exception in method addCar()", e);
+            throw new ServiceException("something wrong when create car", e);
+        }
+        return true;
     }
 
 

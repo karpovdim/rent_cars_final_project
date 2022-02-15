@@ -1,8 +1,8 @@
 package by.karpov.rent_cars_final_project.service.impl;
 
 import by.karpov.rent_cars_final_project.command.RequestParameter;
-import by.karpov.rent_cars_final_project.dao.OrderDao;
-import by.karpov.rent_cars_final_project.dao.impl.OrderDaoImpl;
+import by.karpov.rent_cars_final_project.controller.filter.dao.OrderDao;
+import by.karpov.rent_cars_final_project.controller.filter.dao.impl.OrderDaoImpl;
 import by.karpov.rent_cars_final_project.entity.Car;
 import by.karpov.rent_cars_final_project.entity.Order;
 import by.karpov.rent_cars_final_project.entity.User;

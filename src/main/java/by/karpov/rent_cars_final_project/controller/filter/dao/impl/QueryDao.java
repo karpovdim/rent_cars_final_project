@@ -1,4 +1,4 @@
-package by.karpov.rent_cars_final_project.dao.impl;
+package by.karpov.rent_cars_final_project.controller.filter.dao.impl;
 
 public final class QueryDao {
     /**
