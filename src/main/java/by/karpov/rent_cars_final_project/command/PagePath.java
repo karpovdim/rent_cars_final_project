@@ -12,7 +12,7 @@ public final class PagePath {
 	public static final String PERSONAL_PROFILE_REDIRECT = "/rentalcar/controller?command=to_personal_profile_page_command";
 	public static final String PERSONAL_PROFILE_PAGE = "/pages/personal_profile.jsp";
 
-	public static final String MAKE_ORDER_REDIRECT = "/rentalcar/controller?command=to_make_order_page_command";
+	public static final String MAKE_ORDER_REDIRECT = "/rentalcar/ ?command=to_make_order_page_command";
 	public static final String MAKE_ORDER_PAGE = "/pages/make_order.jsp";
 
 	public static final String CHANGE_FIRST_NAME_REDIRECT = "/rentalcar/controller?command=to_change_first_name_page_command";

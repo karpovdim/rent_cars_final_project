@@ -36,7 +36,6 @@ public class InitializeDefaultValuesFilter implements Filter {
 			session.setAttribute(IS_AUTHENTICATED, false);
 		}
 		chain.doFilter(request, response);
-
 	}
 
 	public void destroy() {

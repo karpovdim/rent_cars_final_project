@@ -1,7 +1,6 @@
 package by.karpov.rent_cars_final_project.controller;
 
 
-import by.karpov.rent_cars_final_project.command.Command;
 import by.karpov.rent_cars_final_project.command.CommandProvider;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,7 +19,6 @@ import static by.karpov.rent_cars_final_project.command.RequestParameter.COMMAND
 @WebServlet("/controller")
 public class Controller extends HttpServlet {
     private static final Logger LOGGER = LogManager.getLogger(Controller.class);
-
     private final CommandProvider provider = CommandProvider.getInstance();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
