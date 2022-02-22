@@ -8,6 +8,7 @@ import by.karpov.rent_cars_final_project.command.SessionAttribute;
 import by.karpov.rent_cars_final_project.controller.Router;
 import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
+import by.karpov.rent_cars_final_project.service.UserService;
 import by.karpov.rent_cars_final_project.service.impl.UserServiceImpl;
 import by.karpov.rent_cars_final_project.validator.InputDataValidator;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +17,11 @@ import org.apache.logging.log4j.Logger;
 
 public class ChangeUserRoleCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(ChangeUserRoleCommand.class);
+private final UserService userService;
+
+    public ChangeUserRoleCommand(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -26,7 +32,6 @@ public class ChangeUserRoleCommand implements Command {
         if (user == null || !validator.isActiveAdmin(user)) {
             return new Router(PagePath.ERROR_403_PAGE);
         }
-        final var userService = UserServiceImpl.getInstance();
         final var userId = request.getParameter(RequestParameter.USER_ID);
         final var userRole = request.getParameter(RequestParameter.USER_ROLE);
         if (userId != null && !userId.isBlank() && validator.isRolePresent(userRole)) {

@@ -22,15 +22,10 @@ import static by.karpov.rent_cars_final_project.entity.User.UserStatus.CONFIRMAT
 
 public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
-    private static final UserServiceImpl instance = new UserServiceImpl();
     private final UserDao userDao = UserDaoImpl.getInstance();
     private final InputDataValidator validator = InputDataValidator.getInstance();
 
-    private UserServiceImpl() {
-    }
-
-    public static UserService getInstance() {
-        return instance;
+    public UserServiceImpl() {
     }
 
     @Override

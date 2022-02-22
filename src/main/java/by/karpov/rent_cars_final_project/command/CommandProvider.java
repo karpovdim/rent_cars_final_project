@@ -8,6 +8,12 @@ import by.karpov.rent_cars_final_project.command.impl.find.FindCarByManufacturer
 import by.karpov.rent_cars_final_project.command.impl.find.FindOrderByIdCommand;
 import by.karpov.rent_cars_final_project.command.impl.page.*;
 import by.karpov.rent_cars_final_project.command.impl.page.admin.*;
+import by.karpov.rent_cars_final_project.service.CarService;
+import by.karpov.rent_cars_final_project.service.OrderService;
+import by.karpov.rent_cars_final_project.service.UserService;
+import by.karpov.rent_cars_final_project.service.impl.CarServiceImpl;
+import by.karpov.rent_cars_final_project.service.impl.OrderServiceImpl;
+import by.karpov.rent_cars_final_project.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +26,9 @@ public final class CommandProvider {
     private static final Logger LOGGER = LogManager.getLogger(CommandProvider.class);
     private static final CommandProvider INSTANCE = new CommandProvider();
     private final EnumMap<CommandType, Command> commands = new EnumMap(CommandType.class);
-
+    private final CarService carService = new CarServiceImpl();
+    private final OrderService orderService = new OrderServiceImpl();
+    private final UserService userService = new UserServiceImpl();
     private CommandProvider() {
         initializeCommonChangeCommands();
         initializeAdminChangeCommands();
@@ -104,13 +112,13 @@ public final class CommandProvider {
     }
 
     private void initializeAdminChangeCommands() {
-        commands.put(CHANGE_USER_STATUS_COMMAND, new ChangeUserStatusCommand());
-        commands.put(CHANGE_CAR_STATUS_COMMAND, new ChangeCarStatusCommand());
-        commands.put(CHANGE_USER_ROLE_COMMAND, new ChangeUserRoleCommand());
-        commands.put(CHANGE_ORDER_STATUS_COMMAND, new ChangeOrderStatus());
-        commands.put(CHANGE_CAR_COST_COMMAND, new ChangeCarCostCommand());
-        commands.put(DELETE_USER_COMMAND, new DeleteUserCommand());
-        commands.put(DELETE_CAR_COMMAND, new DeleteCarCommand());
+        commands.put(CHANGE_USER_STATUS_COMMAND, new ChangeUserStatusCommand(userService));
+        commands.put(CHANGE_CAR_STATUS_COMMAND, new ChangeCarStatusCommand(carService));
+        commands.put(CHANGE_USER_ROLE_COMMAND, new ChangeUserRoleCommand(userService));
+        commands.put(CHANGE_ORDER_STATUS_COMMAND, new ChangeOrderStatus(orderService));
+        commands.put(CHANGE_CAR_COST_COMMAND, new ChangeCarCostCommand(carService));
+        commands.put(DELETE_USER_COMMAND, new DeleteUserCommand(userService));
+        commands.put(DELETE_CAR_COMMAND, new DeleteCarCommand(carService));
 
     }
 }

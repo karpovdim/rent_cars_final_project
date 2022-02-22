@@ -17,7 +17,11 @@ import org.apache.logging.log4j.Logger;
 
 public class DeleteUserCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(DeleteUserCommand.class);
-    private final UserService userServiceImpl = UserServiceImpl.getInstance();
+    private final UserService userService;
+
+    public DeleteUserCommand(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -35,10 +39,10 @@ public class DeleteUserCommand implements Command {
                 request.setAttribute(RequestParameter.DELETE_USER_INCORRECT, true);
                 return new Router(PagePath.ADMIN_USERS_PAGE);
             }
-            final var optionalUser = userServiceImpl.findById(userId);
+            final var optionalUser = userService.findById(userId);
             if (optionalUser.isPresent()) {
                 final var userDelete = optionalUser.get();
-                userServiceImpl.delete(userDelete);
+                userService.delete(userDelete);
                 router = new Router(PagePath.ADMIN_USERS_REDIRECT);
                 router.setRedirect();
             } else {

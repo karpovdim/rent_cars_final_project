@@ -7,7 +7,7 @@ import by.karpov.rent_cars_final_project.command.SessionAttribute;
 import by.karpov.rent_cars_final_project.controller.Router;
 import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
-import by.karpov.rent_cars_final_project.service.impl.CarServiceImpl;
+import by.karpov.rent_cars_final_project.service.CarService;
 import by.karpov.rent_cars_final_project.validator.InputDataValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
@@ -17,7 +17,11 @@ import java.math.BigDecimal;
 
 public class ChangeCarCostCommand implements Command {
 	private static final Logger LOGGER = LogManager.getLogger(ChangeCarCostCommand.class);
+	private final CarService carService;
 
+	public ChangeCarCostCommand(CarService carService) {
+		this.carService = carService;
+	}
 
 	@Override
 	public Router execute(HttpServletRequest request) {
@@ -30,7 +34,6 @@ public class ChangeCarCostCommand implements Command {
 		}
 		final var carId = request.getParameter(RequestParameter.CAR_ID);
 		final var carCost = request.getParameter(RequestParameter.CAR_COST);
-		final var carService = CarServiceImpl.getInstance();
 		if (carId != null && !carId.isBlank() && carCost != null && !carCost.isBlank()) {
 			try {
 				final var optionalCar = carService.updateCost(Long.parseLong(carId), new BigDecimal(carCost));

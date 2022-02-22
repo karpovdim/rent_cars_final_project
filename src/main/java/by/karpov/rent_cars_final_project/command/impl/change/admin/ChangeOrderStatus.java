@@ -8,6 +8,7 @@ import by.karpov.rent_cars_final_project.controller.Router;
 import by.karpov.rent_cars_final_project.entity.Order;
 import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
+import by.karpov.rent_cars_final_project.service.OrderService;
 import by.karpov.rent_cars_final_project.service.impl.OrderServiceImpl;
 import by.karpov.rent_cars_final_project.validator.InputDataValidator;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +17,11 @@ import org.apache.logging.log4j.Logger;
 
 public class ChangeOrderStatus implements Command {
 	private static final Logger LOGGER = LogManager.getLogger(ChangeCarStatusCommand.class);
+private final OrderService orderService;
+
+	public ChangeOrderStatus(OrderService orderService) {
+		this.orderService = orderService;
+	}
 
 	@Override
 	public Router execute(HttpServletRequest request) {
@@ -26,7 +32,6 @@ public class ChangeOrderStatus implements Command {
 		if (user == null || !validator.isActiveAdmin(user)) {
 			return new Router(PagePath.ERROR_403_PAGE);
 		}
-		final var orderService = OrderServiceImpl.getInstance();
 		final var orderId = request.getParameter(RequestParameter.ORDER_ID);
 		final var orderStatus = request.getParameter(RequestParameter.ORDER_STATUS);
 		if (orderId != null && !orderId.isBlank() && validator.isStatusOrderPresent(orderStatus)) {

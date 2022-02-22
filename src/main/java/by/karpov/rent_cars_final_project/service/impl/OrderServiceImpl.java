@@ -27,15 +27,10 @@ import static by.karpov.rent_cars_final_project.command.RequestParameter.*;
 public class OrderServiceImpl implements OrderService {
     private static final Logger LOGGER = LogManager.getLogger(OrderServiceImpl.class);
 
-    private static final OrderServiceImpl INSTANCE = new OrderServiceImpl();
     private final OrderDao orderDao = OrderDaoImpl.getInstance();
     private final InputDataValidator validator = InputDataValidator.getInstance();
 
-    private OrderServiceImpl() {
-    }
-
-    public static OrderServiceImpl getInstance() {
-        return INSTANCE;
+    public OrderServiceImpl() {
     }
 
     @Override

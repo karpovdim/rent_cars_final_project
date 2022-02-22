@@ -20,16 +20,16 @@ import static by.karpov.rent_cars_final_project.command.RequestParameter.*;
 
 public class CarServiceImpl implements CarService {
     private static final Logger LOGGER = LogManager.getLogger(CarServiceImpl.class);
-    private static final CarServiceImpl instance = new CarServiceImpl();
+   // private static final CarServiceImpl instance = new CarServiceImpl();
     private final CarDao carDaoImpl = CarDaoImpl.getInstance();
     private final InputDataValidator validator = InputDataValidator.getInstance();
 
-    private CarServiceImpl() {
+    public CarServiceImpl() {
     }
 
-    public static CarServiceImpl getInstance() {
-        return instance;
-    }
+  //  public static CarServiceImpl getInstance() {
+//        return instance;
+//    }
 
     @Override
     public Optional<Car> findById(long id) throws ServiceException {

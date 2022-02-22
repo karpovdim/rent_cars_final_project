@@ -7,6 +7,7 @@ import by.karpov.rent_cars_final_project.command.SessionAttribute;
 import by.karpov.rent_cars_final_project.controller.Router;
 import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
+import by.karpov.rent_cars_final_project.service.CarService;
 import by.karpov.rent_cars_final_project.service.impl.CarServiceImpl;
 import by.karpov.rent_cars_final_project.validator.InputDataValidator;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +17,12 @@ import org.apache.logging.log4j.Logger;
 
 public class DeleteCarCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(DeleteUserCommand.class);
+    private final CarService carService;
+
+    public DeleteCarCommand(CarService carService) {
+        this.carService = carService;
+    }
+
     @Override
     public Router execute(HttpServletRequest request) {
         Router router;
@@ -31,7 +38,6 @@ public class DeleteCarCommand implements Command {
                 request.setAttribute(RequestParameter.DELETE_CAR_INCORRECT, true);
                 return new Router(PagePath.ADMIN_CARS_PAGE);
             }
-            final var carService = CarServiceImpl.getInstance();
             final var optionalCar = carService.findById(carId);
             if (optionalCar.isPresent()) {
                 final var carDelete = optionalCar.get();

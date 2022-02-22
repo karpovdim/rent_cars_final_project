@@ -9,7 +9,7 @@ import by.karpov.rent_cars_final_project.controller.Router;
 import by.karpov.rent_cars_final_project.entity.Car;
 import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
-import by.karpov.rent_cars_final_project.service.impl.CarServiceImpl;
+import by.karpov.rent_cars_final_project.service.CarService;
 import by.karpov.rent_cars_final_project.validator.InputDataValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
@@ -27,7 +27,6 @@ public class ChangeCarStatusCommand implements Command {
         if (user == null || !validator.isActiveAdmin(user)) {
             return new Router(PagePath.ERROR_403_PAGE);
         }
-        final var carService = CarServiceImpl.getInstance();
         final var carId = request.getParameter(RequestParameter.CAR_ID);
         final var carStatus = request.getParameter(RequestParameter.CAR_STATUS);
         if (carId != null && !carId.isBlank() && validator.isStatusCarPresent(carStatus)) {
