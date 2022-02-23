@@ -19,21 +19,24 @@ import static by.karpov.rent_cars_final_project.command.SessionAttribute.USER;
 
 public class ChangePasswordCommand implements Command {
 	private static final Logger LOGGER = LogManager.getLogger(ChangePasswordCommand.class);
+	private final UserService userService;
 
+	public ChangePasswordCommand(UserService userService) {
+		this.userService = userService;
+	}
 
 	@Override
 	public Router execute(HttpServletRequest request) {
 		LOGGER.info("method execute()");
 		Router router;
 		HttpSession session = request.getSession();
-		UserService service = UserServiceImpl.getInstance();
 		User user = (User) session.getAttribute(USER);
 		if (user == null ) {
 			return new Router(PagePath.ERROR_403_PAGE);
 		}
 		String newPassword = request.getParameter(RequestParameter.NEW_PASSWORD);
 		String oldPassword = request.getParameter(RequestParameter.OLD_PASSWORD);
-		if (service.updatePassword(user.getEmailLogin(), oldPassword, newPassword)) {
+		if (userService.updatePassword(user.getEmailLogin(), oldPassword, newPassword)) {
 			router = new Router(PagePath.HOME_PAGE_REDIRECT);
 			router.setRedirect();
 			LOGGER.info("the password was changed successfully");

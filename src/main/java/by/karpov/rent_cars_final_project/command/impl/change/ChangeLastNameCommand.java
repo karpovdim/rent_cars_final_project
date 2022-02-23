@@ -17,19 +17,23 @@ import static by.karpov.rent_cars_final_project.command.SessionAttribute.USER;
 
 public class ChangeLastNameCommand implements Command {
 	private static final Logger LOGGER = LogManager.getLogger(ChangeLastNameCommand.class);
+	private final UserService userService;
+
+	public ChangeLastNameCommand(UserService userService) {
+		this.userService = userService;
+	}
 
 	@Override
 	public Router execute(HttpServletRequest request) {
 		LOGGER.info("method execute()");
 		Router router;
 		HttpSession session = request.getSession();
-		UserService service = UserServiceImpl.getInstance();
 		User user = (User) session.getAttribute(USER);
 		if (user == null ) {
 			return new Router(PagePath.ERROR_403_PAGE);
 		}
 		String name = request.getParameter(RequestParameter.USER_LAST_NAME);
-		if (service.updateLastName(user.getId(), name)) {
+		if (userService.updateLastName(user.getId(), name)) {
 			user.setLastName(name);
 			session.setAttribute(SessionAttribute.USER, user);
 			router = new Router(PagePath.HOME_PAGE_REDIRECT);

@@ -103,11 +103,11 @@ public final class CommandProvider {
         commands.put(TO_CHANGE_LAST_NAME_PAGE_COMMAND, new GoToChangeLastNamePageCommand());
         commands.put(TO_CHANGE_PASSWORD_PAGE_COMMAND, new GoToChangePasswordPageCommand());
         commands.put(TO_CHANGE_EMAIL_PAGE_COMMAND, new GoToChangeEmailPageCommand());
-        commands.put(CHANGE_PHONE_NUMBER_PAGE, new ChangePhoneNumberCommand());
-        commands.put(CHANGE_FIRST_NAME_PAGE, new ChangeFirstNameCommand());
-        commands.put(CHANGE_LAST_NAME_PAGE, new ChangeLastNameCommand());
-        commands.put(CHANGE_PASSWORD_PAGE, new ChangePasswordCommand());
-        commands.put(CHANGE_EMAIL_PAGE, new ChangeEmailCommand());
+        commands.put(CHANGE_PHONE_NUMBER_PAGE, new ChangePhoneNumberCommand(userService));
+        commands.put(CHANGE_FIRST_NAME_PAGE, new ChangeFirstNameCommand(userService));
+        commands.put(CHANGE_LAST_NAME_PAGE, new ChangeLastNameCommand(userService));
+        commands.put(CHANGE_PASSWORD_PAGE, new ChangePasswordCommand(userService));
+        commands.put(CHANGE_EMAIL_PAGE, new ChangeEmailCommand(userService));
 
     }
 
