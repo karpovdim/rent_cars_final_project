@@ -26,9 +26,11 @@ public final class CommandProvider {
     private static final Logger LOGGER = LogManager.getLogger(CommandProvider.class);
     private static final CommandProvider INSTANCE = new CommandProvider();
     private final EnumMap<CommandType, Command> commands = new EnumMap(CommandType.class);
+
     private final CarService carService = new CarServiceImpl();
     private final OrderService orderService = new OrderServiceImpl();
     private final UserService userService = new UserServiceImpl();
+
     private CommandProvider() {
         initializeCommonChangeCommands();
         initializeAdminChangeCommands();
@@ -61,13 +63,13 @@ public final class CommandProvider {
 
     private void initializeCommonCommands() {
         commands.put(TO_PERSONAL_PROFILE_PAGE_COMMAND, new GoToPersonalProfilePageCommand());
-        commands.put(FIND_MANUFACTURER_BY_ID_COMMAND, new FindCarByManufacturerCommand());
+        commands.put(FIND_MANUFACTURER_BY_ID_COMMAND, new FindCarByManufacturerCommand(carService));
         commands.put(TO_PAYMENT_ENTRY_PAGE_COMMAND, new GoToPaymentEntryPageCommand());
-        commands.put(TO_MAKE_ORDER_PAGE_COMMAND, new GoToMakeOrderPageCommand());
+        commands.put(TO_MAKE_ORDER_PAGE_COMMAND, new GoToMakeOrderPageCommand(carService));
         commands.put(TO_SIGN_IN_PAGE_COMMAND, new GoToSignInPageCommand());
-        commands.put(TO_HOME_PAGE_COMMAND, new GoToHomePageCommand());
-        commands.put(PAYMENT_ENTRY_PAGE, new PaymentCommand());
-        commands.put(MAKE_ORDER_PAGE, new MakeOrderCommand());
+        commands.put(TO_HOME_PAGE_COMMAND, new GoToHomePageCommand(carService));
+        commands.put(PAYMENT_ENTRY_PAGE, new PaymentCommand(orderService,carService));
+        commands.put(MAKE_ORDER_PAGE, new MakeOrderCommand(orderService,carService));
         commands.put(SIGN_OUT_COMMAND, new SignOutCommand());
         commands.put(SIGN_IN_PAGE, new SignInCommand(userService)); //todo duplicate
     }

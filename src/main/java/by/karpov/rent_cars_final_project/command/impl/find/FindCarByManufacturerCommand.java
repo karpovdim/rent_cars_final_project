@@ -16,6 +16,11 @@ import java.util.List;
 
 public class FindCarByManufacturerCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(FindCarByManufacturerCommand.class);
+private final CarService carService;
+
+    public FindCarByManufacturerCommand(CarService carService) {
+        this.carService = carService;
+    }
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -23,7 +28,6 @@ public class FindCarByManufacturerCommand implements Command {
         Router router;
         String manufacturer = request.getParameter(RequestParameter.CAR_MANUFACTURER);
         if (manufacturer != null && !manufacturer.isBlank()) {
-            CarService carService = CarServiceImpl.getInstance();
             try {
                 List<Car> cars = carService.findByManufacture(manufacturer);
                 if (cars.isEmpty()) {

@@ -10,6 +10,7 @@ import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
 import by.karpov.rent_cars_final_project.service.CarService;
 import by.karpov.rent_cars_final_project.service.OrderPaymentService;
+import by.karpov.rent_cars_final_project.service.OrderService;
 import by.karpov.rent_cars_final_project.service.impl.CarServiceImpl;
 import by.karpov.rent_cars_final_project.service.impl.OrderPaymentServiceImpl;
 import by.karpov.rent_cars_final_project.service.impl.OrderServiceImpl;
@@ -28,6 +29,13 @@ public class PaymentCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(PaymentCommand.class);
     private static final String CARD_NUMBER = "card_number";
     private static final String CVV = "cvv";
+    private final OrderService orderService;
+    private final CarService carService;
+
+    public PaymentCommand( OrderService orderService,CarService carService) {
+        this.carService = carService;
+        this.orderService = orderService;
+    }
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -42,7 +50,6 @@ public class PaymentCommand implements Command {
         final var cvv = request.getParameter(CVV);
         final var orderId = (long) session.getAttribute(SessionAttribute.ORDER_ID);
         final var car = (Car) session.getAttribute(SessionAttribute.CAR);
-        final var orderService = OrderServiceImpl.getInstance();
         final var paymentService = OrderPaymentServiceImpl.getInstance();
         try {
             final var order = orderService.findById(orderId);
@@ -58,7 +65,6 @@ public class PaymentCommand implements Command {
             } else {
                 LOGGER.error("not enough money to pay");
                 orderService.updateStatus(orderId, Order.OrderStatus.DECLINED);
-                CarService carService = CarServiceImpl.getInstance();
                 carService.updateStatus(car.getId(), Car.CarStatus.FREE);
                 router = new Router(PagePath.PAYMENT_PAGE);
                 request.setAttribute(NOT_ENOUGH_MONEY_TO_PAY, true);

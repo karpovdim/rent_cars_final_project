@@ -31,6 +31,13 @@ import static by.karpov.rent_cars_final_project.command.SessionAttribute.USER;
 public class MakeOrderCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(CodeEntryCommand.class);
 
+    public MakeOrderCommand(OrderService orderService, CarService carService) {
+        this.orderService = orderService;
+        this.carService = carService;
+    }
+
+    private final OrderService orderService;
+   private final CarService carService;
     @Override
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");
@@ -63,8 +70,7 @@ public class MakeOrderCommand implements Command {
         parameters.put(RENT_DATE, rentDateParameters);
         parameters.put(RETURN_DATE, returnDateParameters);
         parameters.put(CAR_COST, car.getCost().toString());
-        OrderService orderService = OrderServiceImpl.getInstance();
-        CarService carService = CarServiceImpl.getInstance();
+
         try {
             final var optionalCar = carService.findById(car.getId());
             long orderId;

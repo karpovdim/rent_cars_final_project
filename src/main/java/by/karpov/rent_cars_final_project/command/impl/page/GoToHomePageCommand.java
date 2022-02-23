@@ -4,14 +4,10 @@ import by.karpov.rent_cars_final_project.command.Command;
 import by.karpov.rent_cars_final_project.command.PagePath;
 import by.karpov.rent_cars_final_project.command.RequestParameter;
 import by.karpov.rent_cars_final_project.controller.Router;
-import by.karpov.rent_cars_final_project.entity.Car;
-import by.karpov.rent_cars_final_project.service.impl.CarServiceImpl;
+import by.karpov.rent_cars_final_project.service.CarService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.List;
 
 import static by.karpov.rent_cars_final_project.command.SessionAttribute.*;
 
@@ -19,7 +15,11 @@ import static by.karpov.rent_cars_final_project.command.SessionAttribute.*;
 public class GoToHomePageCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(GoToHomePageCommand.class);
     private static final int LIMIT_CARS_ON_PAGE = 3;
-    private final CarServiceImpl carServiceImpl = CarServiceImpl.getInstance();
+    private final CarService carService;
+
+    public GoToHomePageCommand(CarService carService) {
+        this.carService = carService;
+    }
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -31,9 +31,9 @@ public class GoToHomePageCommand implements Command {
         final var currentPageNumber = page != null ? Integer.parseInt(page) : 1;
         final var leftBorderCars = (LIMIT_CARS_ON_PAGE * (currentPageNumber - 1));
         try {
-            final var numberOfCars = carServiceImpl.countCars();
+            final var numberOfCars = carService.countCars();
             final var maxNumberOfPages = Math.ceil(numberOfCars / LIMIT_CARS_ON_PAGE);
-            final var cars = carServiceImpl.findByLimit(leftBorderCars, LIMIT_CARS_ON_PAGE);
+            final var cars = carService.findByLimit(leftBorderCars, LIMIT_CARS_ON_PAGE);
             session.setAttribute(CURRENT_PAGE_NUMBER, currentPageNumber);
             session.setAttribute(MAX_NUMBER_OF_PAGES, maxNumberOfPages);
             session.setAttribute(RequestParameter.LIST_CARS, cars);
