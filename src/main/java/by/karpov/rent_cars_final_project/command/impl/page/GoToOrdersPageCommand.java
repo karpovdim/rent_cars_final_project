@@ -26,7 +26,11 @@ import static by.karpov.rent_cars_final_project.command.SessionAttribute.*;
 public class GoToOrdersPageCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(GoToOrdersPageCommand.class);
     private static final int LIMIT_ORDERS_ON_PAGE = 3;
-    private final OrderService orderService = OrderServiceImpl.getInstance();
+    private final OrderService orderService;
+
+    public GoToOrdersPageCommand(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @Override
     public Router execute(HttpServletRequest request) {

@@ -11,7 +11,9 @@ import by.karpov.rent_cars_final_project.entity.Order;
 import by.karpov.rent_cars_final_project.exception.DaoException;
 import by.karpov.rent_cars_final_project.exception.NotFoundException;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
+import by.karpov.rent_cars_final_project.service.CarService;
 import by.karpov.rent_cars_final_project.service.OrderService;
+import by.karpov.rent_cars_final_project.service.UserService;
 import by.karpov.rent_cars_final_project.validator.InputDataValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,9 +31,15 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderDao orderDao = OrderDaoImpl.getInstance();
     private final InputDataValidator validator = InputDataValidator.getInstance();
+private final UserService userService;
+private final CarService carService;
 
-    public OrderServiceImpl() {
+    public OrderServiceImpl(UserService userService, CarService carService) {
+        this.userService = userService;
+        this.carService = carService;
     }
+
+
 
     @Override
     public Optional<Order> findById(long id) throws ServiceException {
@@ -225,8 +233,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private Optional<Order> setUserAndCarById(Optional<Order> optionalOrder) throws ServiceException {
-        final var carService = CarServiceImpl.getInstance();
-        final var userService = UserServiceImpl.getInstance();
+
         try{
             if (optionalOrder.isPresent()) {
                 final var order = optionalOrder.get();

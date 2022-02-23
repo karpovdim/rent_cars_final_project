@@ -32,7 +32,7 @@ public class OrderServiceImplTest {
     public void initialize() {
         dao = mock(OrderDaoImpl.class);
         Whitebox.setInternalState(OrderDaoImpl.class, "instance", dao);
-        service = OrderServiceImpl.getInstance();
+        service = new OrderServiceImpl(new UserServiceImpl(),new CarServiceImpl());
         parameters = new HashMap<>();
         parameters.put(RequestParameter.RENT_DATE, "2021-10-20");
         parameters.put(RequestParameter.RETURN_DATE, "2021-10-25");

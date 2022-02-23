@@ -28,8 +28,8 @@ public final class CommandProvider {
     private final EnumMap<CommandType, Command> commands = new EnumMap(CommandType.class);
 
     private final CarService carService = new CarServiceImpl();
-    private final OrderService orderService = new OrderServiceImpl();
     private final UserService userService = new UserServiceImpl();
+    private final OrderService orderService = new OrderServiceImpl(userService,carService);
 
     private CommandProvider() {
         initializeCommonChangeCommands();
@@ -75,7 +75,7 @@ public final class CommandProvider {
     }
 
     private void initializeUserCommands() {
-        commands.put(TO_ORDERS_PAGE_COMMAND, new GoToOrdersPageCommand());
+        commands.put(TO_ORDERS_PAGE_COMMAND, new GoToOrdersPageCommand(orderService));
     }
 
     private void initializeSignUpCommands() {

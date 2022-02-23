@@ -31,7 +31,7 @@ public class UserServiceImplTest {
     public void initialize() {
         dao = Mockito.mock(UserDaoImpl.class);
         Whitebox.setInternalState(UserDaoImpl.class, "instance", dao);
-        service = UserServiceImpl.getInstance();
+        service = new UserServiceImpl();
         parameters = new HashMap<>();
         parameters.put(RequestParameter.USER_EMAIL, "korozarecipient@gmail.com");
         parameters.put(RequestParameter.USER_PASSWORD, "12345");

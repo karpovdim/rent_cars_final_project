@@ -4,6 +4,7 @@ import by.karpov.rent_cars_final_project.entity.Car;
 import by.karpov.rent_cars_final_project.entity.Order;
 import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
+import by.karpov.rent_cars_final_project.service.CarService;
 import by.karpov.rent_cars_final_project.service.impl.CarServiceImpl;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +29,7 @@ public class InputDataValidator {
     private static final String CARD_NUMBER_REGEX = "^\\d{16}$";
     private static final String CVV_REGEX = "^\\d{3}$";
     private static final String CODE_AUTHENTICATION_REGEX = "^\\d{4}$";
-
+private final CarService carService = new CarServiceImpl();
     private InputDataValidator() {
     }
 
@@ -128,7 +129,6 @@ public class InputDataValidator {
     }
 
     public boolean isCarPresent(String regNumber) {
-        final var carService = CarServiceImpl.getInstance();
         if (isRegNumberValid(regNumber)) {
             try {
                 final var optionalCar = carService.findByRegistrationNumber(regNumber);

@@ -24,7 +24,7 @@ public class CarServiceImplTest {
 
     @BeforeClass
     public void initialize() {
-        service = CarServiceImpl.getInstance();
+        service = new CarServiceImpl();
         parameters = new HashMap<>();
         parameters.put(RequestParameter.CAR_DESCRIPTION, "Audi a6 2,4i");
         parameters.put(RequestParameter.CAR_REGISTRATION_NUMBER, "1097AA");

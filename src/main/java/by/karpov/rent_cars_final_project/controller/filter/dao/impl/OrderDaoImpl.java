@@ -161,7 +161,6 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     private Order buildOrder(ResultSet resultSet) throws SQLException{
-        final var carService = CarServiceImpl.getInstance();
         return Order.builder()
                 .id(resultSet.getLong(COLUMN_ID))
                 .price(resultSet.getBigDecimal(COLUMN_PRICE_ORDER))
