@@ -18,20 +18,24 @@ import static by.karpov.rent_cars_final_project.entity.User.UserStatus.ACTIVE;
 
 public class CodeEntryCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(CodeEntryCommand.class);
+private final UserService userService;
+
+    public CodeEntryCommand(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");
         Router router;
-        final var userServiceImpl = UserServiceImpl.getInstance();
         final var enteredCode = request.getParameter(RequestParameter.CODE);
         try {
-            final var userOptional = userServiceImpl.findByPasswordForAuthentication(enteredCode);
+            final var userOptional = userService.findByPasswordForAuthentication(enteredCode);
             if (userOptional.isPresent()) {
                 final var user = userOptional.get();
                 user.setUserStatus(ACTIVE);
-                userServiceImpl.update(user);
-                userServiceImpl.updatePasswordForAuthentication(user.getId(), null);
+                userService.update(user);
+                userService.updatePasswordForAuthentication(user.getId(), null);
                 router = new Router(PagePath.HOME_PAGE_REDIRECT);
                 router.setRedirect();
                 LOGGER.info("the code is confirmed. Status changed to active");

@@ -7,6 +7,7 @@ import by.karpov.rent_cars_final_project.controller.Router;
 import by.karpov.rent_cars_final_project.entity.Order;
 import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
+import by.karpov.rent_cars_final_project.service.OrderService;
 import by.karpov.rent_cars_final_project.service.impl.OrderServiceImpl;
 import by.karpov.rent_cars_final_project.validator.InputDataValidator;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +22,11 @@ import static by.karpov.rent_cars_final_project.command.SessionAttribute.*;
 public class GoToAdminOrdersPageCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(GoToAdminUsersPageCommand.class);
     private static final int LIMIT_ORDERS_ON_PAGE = 3;
+private final OrderService orderService;
+
+    public GoToAdminOrdersPageCommand(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -40,7 +46,6 @@ public class GoToAdminOrdersPageCommand implements Command {
         } else {
             currentPageNumber = 1;
         }
-        final var orderService = OrderServiceImpl.getInstance();
         try {
             double numberOfOrders = orderService.countOrders();
             double maxNumberOfPages = Math.ceil(numberOfOrders / LIMIT_ORDERS_ON_PAGE);

@@ -22,6 +22,12 @@ import static by.karpov.rent_cars_final_project.command.RequestParameter.*;
 public class AdminAddCarCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(AdminAddCarCommand.class);
 
+    public AdminAddCarCommand(CarService carService) {
+        this.carService = carService;
+    }
+
+    private final CarService carService;
+
     @Override
     public Router execute(HttpServletRequest request) {
         LOGGER.info("method execute()");
@@ -45,7 +51,6 @@ public class AdminAddCarCommand implements Command {
         parameters.put(CAR_DESCRIPTION, description);
         parameters.put(CAR_REGISTRATION_NUMBER, regNumber);
         parameters.put(CAR_STATUS, status);
-        CarService carService = CarServiceImpl.getInstance();
         if (checkInputDate(parameters, request)) {
             LOGGER.error("incorrect date of Car create");
             return new Router(PagePath.ADMIN_ADD_CAR_PAGE);

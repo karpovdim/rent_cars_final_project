@@ -69,7 +69,7 @@ public final class CommandProvider {
         commands.put(PAYMENT_ENTRY_PAGE, new PaymentCommand());
         commands.put(MAKE_ORDER_PAGE, new MakeOrderCommand());
         commands.put(SIGN_OUT_COMMAND, new SignOutCommand());
-        commands.put(SIGN_IN_PAGE, new SignInCommand());
+        commands.put(SIGN_IN_PAGE, new SignInCommand(userService)); //todo duplicate
     }
 
     private void initializeUserCommands() {
@@ -80,19 +80,19 @@ public final class CommandProvider {
         commands.put(TO_CODE_ENTRY_PAGE_COMMAND, new GoToCodeEntryPageCommand());
         commands.put(TO_SIGN_UP_PAGE_COMMAND, new GoToSignUpPageCommand());
         commands.put(TO_SIGN_IN_PAGE_COMMAND, new GoToSignInPageCommand());
-        commands.put(CODE_ENTRY_PAGE, new CodeEntryCommand());
+        commands.put(CODE_ENTRY_PAGE, new CodeEntryCommand(userService));
         commands.put(SIGN_OUT_COMMAND, new SignOutCommand());
-        commands.put(SIGN_UP_PAGE, new SignUpCommand());
-        commands.put(SIGN_IN_PAGE, new SignInCommand());
+        commands.put(SIGN_UP_PAGE, new SignUpCommand(userService));
+        commands.put(SIGN_IN_PAGE, new SignInCommand(userService)); //todo duplicate
     }
 
     private void initializeAdminCommands() {
         commands.put(TO_ADMIN_ADD_CAR_PAGE_COMMAND, new GoToAdminAddCarPageCommand());
-        commands.put(TO_ADMIN_ORDERS_PAGE_COMMAND, new GoToAdminOrdersPageCommand());
-        commands.put(TO_ADMIN_USERS_PAGE_COMMAND, new GoToAdminUsersPageCommand());
-        commands.put(TO_ADMIN_CARS_PAGE_COMMAND, new GoToAdminCarsPageCommand());
-        commands.put(FIND_ORDER_BY_ID_COMMAND, new FindOrderByIdCommand());
-        commands.put(ADMIN_ADD_CAR_PAGE, new AdminAddCarCommand());
+        commands.put(TO_ADMIN_ORDERS_PAGE_COMMAND, new GoToAdminOrdersPageCommand(orderService));
+        commands.put(TO_ADMIN_USERS_PAGE_COMMAND, new GoToAdminUsersPageCommand(userService));
+        commands.put(TO_ADMIN_CARS_PAGE_COMMAND, new GoToAdminCarsPageCommand(carService));
+        commands.put(FIND_ORDER_BY_ID_COMMAND, new FindOrderByIdCommand(orderService));
+        commands.put(ADMIN_ADD_CAR_PAGE, new AdminAddCarCommand(carService));
     }
 
     private void initializeCommonChangeCommands() {

@@ -9,7 +9,7 @@ import by.karpov.rent_cars_final_project.controller.Router;
 import by.karpov.rent_cars_final_project.entity.Order;
 import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
-import by.karpov.rent_cars_final_project.service.impl.OrderServiceImpl;
+import by.karpov.rent_cars_final_project.service.OrderService;
 import by.karpov.rent_cars_final_project.validator.InputDataValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +20,11 @@ import java.util.stream.Collectors;
 
 public class FindOrderByIdCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(ChangeUserRoleCommand.class);
+    private final OrderService orderService;
+
+    public FindOrderByIdCommand(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -34,9 +39,8 @@ public class FindOrderByIdCommand implements Command {
         final var id = request.getParameter(RequestParameter.ORDER_ID);
         if (id != null && !id.isBlank()) {
             try {
-                OrderServiceImpl service = OrderServiceImpl.getInstance();
                 long orderId = Long.parseLong(id);
-                Optional<Order> order = service.findById(orderId);
+                Optional<Order> order = orderService.findById(orderId);
                 final var orders = order.stream().collect(Collectors.toList());
                 request.setAttribute(RequestParameter.LIST_ORDERS, orders);
                 router = new Router(PagePath.ADMIN_ORDERS_PAGE);

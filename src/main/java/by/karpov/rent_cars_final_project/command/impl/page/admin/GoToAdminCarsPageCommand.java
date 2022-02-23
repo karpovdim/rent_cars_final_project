@@ -7,6 +7,7 @@ import by.karpov.rent_cars_final_project.controller.Router;
 import by.karpov.rent_cars_final_project.entity.Car;
 import by.karpov.rent_cars_final_project.entity.User;
 import by.karpov.rent_cars_final_project.exception.ServiceException;
+import by.karpov.rent_cars_final_project.service.CarService;
 import by.karpov.rent_cars_final_project.service.impl.CarServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -20,6 +21,11 @@ import static by.karpov.rent_cars_final_project.command.SessionAttribute.*;
 public class GoToAdminCarsPageCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(GoToAdminAddCarPageCommand.class);
     private static final int LIMIT_ORDERS_ON_PAGE = 3;
+private final CarService carService;
+
+    public GoToAdminCarsPageCommand(CarService carService) {
+        this.carService = carService;
+    }
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -38,12 +44,11 @@ public class GoToAdminCarsPageCommand implements Command {
         } else {
             currentPageNumber = 1;
         }
-        final var carServiceImpl = CarServiceImpl.getInstance();
         try {
-            double numberOfCars = carServiceImpl.countCars();
+            double numberOfCars = carService.countCars();
             double maxNumberOfPages = Math.ceil(numberOfCars / LIMIT_ORDERS_ON_PAGE);
             int leftBorderUsers = (LIMIT_ORDERS_ON_PAGE * (currentPageNumber - 1));
-            List<Car> cars = carServiceImpl.findByLimit(leftBorderUsers, LIMIT_ORDERS_ON_PAGE);
+            List<Car> cars = carService.findByLimit(leftBorderUsers, LIMIT_ORDERS_ON_PAGE);
             session.setAttribute(CURRENT_PAGE_NUMBER, currentPageNumber);
             session.setAttribute(MAX_NUMBER_OF_PAGES, maxNumberOfPages);
             session.setAttribute(RequestParameter.LIST_CARS, cars);

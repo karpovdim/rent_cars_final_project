@@ -20,6 +20,11 @@ import static by.karpov.rent_cars_final_project.command.SessionAttribute.*;
 public class GoToAdminUsersPageCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(GoToAdminUsersPageCommand.class);
     private static final int LIMIT_ORDERS_ON_PAGE = 3;
+private final UserService userService;
+
+    public GoToAdminUsersPageCommand(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -38,12 +43,11 @@ public class GoToAdminUsersPageCommand implements Command {
         } else {
             currentPageNumber = 1;
         }
-        final var userServiceImpl = UserServiceImpl.getInstance();
         try {
-            double numberOfUsers = userServiceImpl.countUsers();
+            double numberOfUsers = userService.countUsers();
             double maxNumberOfPages = Math.ceil(numberOfUsers / LIMIT_ORDERS_ON_PAGE);
             int leftBorderUsers = (LIMIT_ORDERS_ON_PAGE * (currentPageNumber - 1));
-            List<User> users = userServiceImpl.findByLimit(leftBorderUsers, LIMIT_ORDERS_ON_PAGE);
+            List<User> users = userService.findByLimit(leftBorderUsers, LIMIT_ORDERS_ON_PAGE);
             session.setAttribute(CURRENT_PAGE_NUMBER, currentPageNumber);
             session.setAttribute(MAX_NUMBER_OF_PAGES, maxNumberOfPages);
             session.setAttribute(RequestParameter.LIST_USERS, users);
